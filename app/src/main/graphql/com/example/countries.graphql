@@ -1,54 +1,54 @@
-query getCountries{
-    Country{
+query getCountries {
+    Country {
         ...CountryPreview
     }
 }
 
-query getCountryById($id:String){
-    Country(_id: $id){
+query getCountryById($id:String) {
+    Country(_id: $id) {
         ...CountryDetails
     }
 }
 
-fragment CountryPreview on Country{
+fragment CountryPreview on Country {
     _id
     name
     capital
-    flag{
+    flag {
         svgFile
     }
-    subregion{
+    subregion {
         name
-        region{
+        region {
             name
         }
     }
 }
 
-fragment CountryDetails on Country{
+fragment CountryDetails on Country {
     name
     population
     capital
-    flag{
+    flag {
         svgFile
     }
-    subregion{
+    subregion {
         name
-        region{
+        region {
             name
         }
     }
-    currencies{
+    currencies {
         name
         symbol
     }
-    officialLanguages{
+    officialLanguages {
         name
     }
-    callingCodes{
+    callingCodes {
         name
     }
-    timezones{
+    timezones {
         name
     }
 }

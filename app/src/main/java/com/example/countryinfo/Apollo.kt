@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Looper
 import com.apollographql.apollo.ApolloClient
 
+private const val API_URL = "https://countries-274616.ew.r.appspot.com/"
 private var instance: ApolloClient? = null
 
 fun apolloClient(context: Context): ApolloClient {
@@ -16,7 +17,7 @@ fun apolloClient(context: Context): ApolloClient {
     }
 
     instance = ApolloClient.builder()
-        .serverUrl("https://countries-274616.ew.r.appspot.com/")
+        .serverUrl(API_URL)
         .build()
 
     return instance!!
