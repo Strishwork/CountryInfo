@@ -1,0 +1,12 @@
+{
+  "name": "Countries",
+  "schemaPath": "schema.json",
+  "extensions": {
+    "endpoints": {
+      "scratchpad": {
+        "url": "https://countries-274616.ew.r.appspot.com/",
+        "introspect": false       
+      }
+    }
+  }
+}
