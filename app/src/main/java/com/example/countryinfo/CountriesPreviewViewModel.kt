@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.apollographql.apollo.api.Response
-import com.apollographql.apollo.api.toJson
 import com.example.GetCountriesQuery
 import com.google.gson.Gson
 import io.reactivex.Observer
@@ -34,9 +33,16 @@ class CountriesPreviewViewModel(private val countryApi: ICountriesApi) : ViewMod
             }
 
             override fun onNext(t: Response<GetCountriesQuery.Data>) {
-                val data = t.data?.toJson().toString()
+                val data = t.data?.country?.map {
+                    country -> CountryPreview(
+                    country?.fragments?.countryPreview?.name?:"",
+                    country?.fragments?.countryPreview?.capital?:"",
+                    country?.fragments?.countryPreview?.flag?.svgFile?:"",
+                    country?.fragments?.countryPreview?.subregion?.region?.name?:""
+                )
+                }
                 countriesMutableLiveData.postValue(
-                    CountriesPreviewViewState.Default(deserializeResponse(data))
+                    data?.let { CountriesPreviewViewState.Default(it) }
                 )
             }
 
@@ -48,24 +54,6 @@ class CountriesPreviewViewModel(private val countryApi: ICountriesApi) : ViewMod
             }
         }
         myObservable.subscribe(myObserver)
-    }
-
-    private fun deserializeResponse(data: String): List<CountryPreview> {
-        val list: MutableList<CountryPreview> = ArrayList()
-        val root = JSONObject(data).getJSONObject("data").getJSONArray("Country")
-        for (i in 0 until root.length()) {
-            val obj = root.getJSONObject(i)
-            val countryPreview = Gson().fromJson(obj.toString(), CountryPreview::class.java)
-            if (obj.has("subregion")) {
-                countryPreview.region =
-                    obj.getJSONObject("subregion").getJSONObject("region").getString("name")
-            }
-            if (obj.has("flag")) {
-                countryPreview.flagUrl = obj.getJSONObject("flag").getString("svgFile")
-            }
-            list.add(countryPreview)
-        }
-        return list
     }
 
 }
