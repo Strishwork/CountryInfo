@@ -18,7 +18,7 @@ class CountriesPreviewViewModel(private val countryApi: ICountriesApi) : ViewMod
     private lateinit var disposable: Disposable
 
     private fun getCountries() {
-        val obs = countryApi.getCountries()
+        val countryObservable = countryApi.getCountries()
             .flatMap { response ->
                 val countriesDto = response.data?.country
                 when {
@@ -40,9 +40,9 @@ class CountriesPreviewViewModel(private val countryApi: ICountriesApi) : ViewMod
                 }
             }
 
-        disposable = obs.subscribe(
-            { t -> countriesMutableLiveData.postValue(CountriesPreviewViewState.Default(t)) },
-            { e -> countriesMutableLiveData.postValue(CountriesPreviewViewState.Error(e)) })
+        disposable = countryObservable.subscribe(
+            { countries -> countriesMutableLiveData.postValue(CountriesPreviewViewState.Default(countries)) },
+            { error -> countriesMutableLiveData.postValue(CountriesPreviewViewState.Error(error)) })
     }
 
     override fun onCleared() {
