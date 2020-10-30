@@ -1,18 +1,13 @@
 package com.example.countryinfo
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.apollographql.apollo.api.Response
-import com.example.GetCountriesQuery
-import com.google.gson.Gson
-import io.reactivex.Observer
+import com.apollographql.apollo.exception.ApolloException
+import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
-import org.json.JSONObject
 
 class CountriesPreviewViewModel(private val countryApi: ICountriesApi) : ViewModel() {
-    private val TAG = "CountriesPreviewViewMod"
 
     init {
         getCountries()
@@ -20,40 +15,38 @@ class CountriesPreviewViewModel(private val countryApi: ICountriesApi) : ViewMod
 
     private val countriesMutableLiveData = MutableLiveData<CountriesPreviewViewState>()
     val pollLiveData: LiveData<CountriesPreviewViewState> = countriesMutableLiveData
+    private lateinit var disposable: Disposable
 
     private fun getCountries() {
-        val myObservable = countryApi.getCountries()
-        val myObserver = object : Observer<Response<GetCountriesQuery.Data>> {
-            override fun onComplete() {
-                Log.d(TAG, "onComplete: ")
-            }
-
-            override fun onSubscribe(d: Disposable) {
-                Log.d(TAG, "onSubscribe: ")
-            }
-
-            override fun onNext(t: Response<GetCountriesQuery.Data>) {
-                val data = t.data?.country?.map {
-                    country -> CountryPreview(
-                    country?.fragments?.countryPreview?.name?:"",
-                    country?.fragments?.countryPreview?.capital?:"",
-                    country?.fragments?.countryPreview?.flag?.svgFile?:"",
-                    country?.fragments?.countryPreview?.subregion?.region?.name?:""
-                )
+        val obs = countryApi.getCountries()
+            .flatMap { response ->
+                val countriesDto = response.data?.country
+                when {
+                    response.hasErrors() -> Observable.error(response.errors?.get(0)?.message?.let {
+                        ApolloException(it)
+                    })
+                    countriesDto == null -> Observable.error(ApolloException("Countries are not available :("))
+                    else -> {
+                        val countries = countriesDto.map { country ->
+                            CountryPreview(
+                                country?.fragments?.countryPreview?.name ?: "",
+                                country?.fragments?.countryPreview?.capital ?: "",
+                                country?.fragments?.countryPreview?.flag?.svgFile ?: "",
+                                country?.fragments?.countryPreview?.subregion?.region?.name ?: ""
+                            )
+                        }
+                        Observable.just(countries)
+                    }
                 }
-                countriesMutableLiveData.postValue(
-                    data?.let { CountriesPreviewViewState.Default(it) }
-                )
             }
 
-            override fun onError(e: Throwable) {
-                Log.d(TAG, "onError: ", e)
-                countriesMutableLiveData.postValue(
-                    CountriesPreviewViewState.Error
-                )
-            }
-        }
-        myObservable.subscribe(myObserver)
+        disposable = obs.subscribe(
+            { t -> countriesMutableLiveData.postValue(CountriesPreviewViewState.Default(t)) },
+            { e -> countriesMutableLiveData.postValue(CountriesPreviewViewState.Error(e)) })
     }
 
+    override fun onCleared() {
+        disposable.dispose()
+        super.onCleared()
+    }
 }
