@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="labels_small_text_size">12sp</dimen>
+    <dimen name="autosize_min_text_size">14sp</dimen>
+    <dimen name="country_info_normal_text_size">24sp</dimen>
+    <dimen name="country_name_text_size">32sp</dimen>
+    <dimen name="toolbar_title_text_size">32sp</dimen>
+    <dimen name="choose_card_text_size">44sp</dimen>
+    <dimen name="country_preview_card_corner_radius">12dp</dimen>
+    <dimen name="country_preview_flag_corner_radius">10dp</dimen>
+    <dimen name="choose_card_image_width">100dp</dimen>
+    <dimen name="choose_card_image_height">100dp</dimen>
+
+</resources>

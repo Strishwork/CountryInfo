@@ -1,4 +1,4 @@
-package com.example.countryinfo
+package com.example.countryinfo.model
 
 import android.content.Context
 import android.os.Looper
