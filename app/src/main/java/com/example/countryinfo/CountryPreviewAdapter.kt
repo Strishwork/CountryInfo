@@ -4,15 +4,13 @@ import android.graphics.drawable.PictureDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.RequestBuilder
+import com.github.twocoffeesoneteam.glidetovectoryou.GlideApp
+import kotlinx.android.synthetic.main.country_preview_card.view.*
 
 class CountryPreviewAdapter(
-    private var values: List<CountryPreview>,
-    private var requestBuilder: RequestBuilder<PictureDrawable>
+    private var values: List<CountryPreview>
 ) : RecyclerView.Adapter<CountryPreviewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -22,11 +20,7 @@ class CountryPreviewAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = values[position]
-        holder.countryName.text = item.countryName
-        requestBuilder.load(item.flagUrl.toUri()).into(holder.countryFlag)
-        holder.capitalName.text = item.capital
-        holder.regionText.text = item.region
+        holder.bind(values[position])
     }
 
     override fun getItemCount(): Int = values.size
@@ -36,10 +30,16 @@ class CountryPreviewAdapter(
         notifyDataSetChanged()
     }
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val countryFlag: ImageView = view.findViewById(R.id.countryFlag)
-        val countryName: TextView = view.findViewById(R.id.country_name)
-        val capitalName: TextView = view.findViewById(R.id.country_capital)
-        val regionText: TextView = view.findViewById(R.id.country_region)
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+
+        fun bind(item: CountryPreview) {
+            val requestBuilder = GlideApp.with(itemView.context)
+                .`as`(PictureDrawable::class.java)
+                .listener(SvgSoftwareLayerSetter())
+            itemView.country_name.text = item.countryName
+            requestBuilder.load(item.flagUrl.toUri()).into(itemView.country_flag)
+            itemView.country_capital.text = item.capital
+            itemView.country_region.text = item.region
+        }
     }
 }

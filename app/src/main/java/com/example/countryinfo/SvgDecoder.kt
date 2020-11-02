@@ -16,7 +16,6 @@ class SvgDecoder : ResourceDecoder<InputStream, SVG> {
         source: InputStream,
         options: Options
     ): Boolean {
-        // TODO: Can we tell?
         return true
     }
 

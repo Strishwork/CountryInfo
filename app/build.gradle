@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id("com.apollographql.apollo").version("2.4.1")
+    id 'kotlin-android-extensions'
 }
 
 android {
