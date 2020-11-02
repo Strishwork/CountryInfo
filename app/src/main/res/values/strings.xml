@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">CountryInfo</string>
+    <string name="country_label">Country</string>
+    <string name="capital_label">Capital</string>
+    <string name="region_label">Region</string>
+    <string name="choose_card_label">Choose a card :)</string>
 </resources>
