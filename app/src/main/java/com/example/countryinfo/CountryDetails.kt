@@ -6,25 +6,9 @@ class CountryDetails(
     val region: String,
     val population: Double,
     val flag: String,
-    val currencies: List<Currency>,
-    val languages: List<Language>,
-    val timezones: List<TimeZone>,
-    val callingCodes: List<CallingCode>
-)
-
-class Currency(
-    val name: String,
-    val symbol: String
-)
-
-class Language(
-    val name: String
-)
-
-class TimeZone(
-    val name: String
-)
-
-class CallingCode(
-    val name: String
+    val currencyNames: List<String>,
+    val currencySymbols: List<String>,
+    val languages: List<String>,
+    val timezones: List<String>,
+    val callingCodes: List<String>
 )

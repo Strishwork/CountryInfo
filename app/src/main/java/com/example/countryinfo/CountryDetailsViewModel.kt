@@ -19,39 +19,16 @@ class CountryDetailsViewModel(private val countryApi: ICountriesApi) : ViewModel
 
     private fun getCountryById(id: String) {
         val countryObservable = countryApi.getCountryById(id)
-            .flatMap { response ->
-                val countryData = response.data?.country
+            .flatMap<CountryDetails> { response ->
+                val countryDetails = response.data?.country?.get(0)?.fragments?.countryDetails
                 when {
                     response.hasErrors() -> Observable.error(response.errors?.get(0)?.message?.let {
                         ApolloException(it)
                     })
-                    countryData == null -> Observable.error(ApolloException("Country is not available :("))
+                    countryDetails == null -> Observable.error(ApolloException("Country is not available :("))
                     else -> {
-                        val country = countryData.map { country ->
-                            CountryDetails(
-                                country?.fragments?.countryDetails?.name ?: "",
-                                country?.fragments?.countryDetails?.capital ?: "",
-                                country?.fragments?.countryDetails?.subregion?.region?.name ?: "",
-                                country?.fragments?.countryDetails?.population ?: 0.0,
-                                country?.fragments?.countryDetails?.flag?.svgFile ?: "",
-                                country?.fragments?.countryDetails?.currencies?.map { currency ->
-                                    Currency(
-                                        currency?.name ?: "",
-                                        currency?.symbol ?: ""
-                                    )
-                                } ?: emptyList(),
-                                country?.fragments?.countryDetails?.officialLanguages?.map { language ->
-                                    Language(language?.name ?: "")
-                                } ?: emptyList(),
-                                country?.fragments?.countryDetails?.timezones?.map { timezone ->
-                                    TimeZone(timezone?.name ?: "")
-                                } ?: emptyList(),
-                                country?.fragments?.countryDetails?.callingCodes?.map { callingCode ->
-                                    CallingCode(callingCode?.name ?: "")
-                                } ?: emptyList()
-                            )
-                        }
-                        Observable.just(country.first())
+                        val country = initCountryDetails(countryDetails)
+                        Observable.just(country)
                     }
                 }
             }
@@ -59,6 +36,22 @@ class CountryDetailsViewModel(private val countryApi: ICountriesApi) : ViewModel
         disposable = countryObservable.subscribe(
             { country -> countryMutableLiveData.postValue(CountryDetailsViewState.Default(country)) },
             { error -> countryMutableLiveData.postValue(CountryDetailsViewState.Error(error)) })
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun initCountryDetails(countryDetailsFragment: com.example.fragment.CountryDetails): CountryDetails {
+        return CountryDetails(
+            countryDetailsFragment.name,
+            countryDetailsFragment.capital,
+            countryDetailsFragment.subregion?.region?.name ?: "",
+            countryDetailsFragment.population,
+            countryDetailsFragment.flag?.svgFile ?: "",
+            countryDetailsFragment.currencies?.map { currencyName -> currencyName?.name } as List<String>,
+            countryDetailsFragment.currencies.map { currencySymbol -> currencySymbol?.symbol } as List<String>,
+            countryDetailsFragment.officialLanguages?.map { language -> language?.name } as List<String>,
+            countryDetailsFragment.timezones?.map { timezone -> timezone?.name } as List<String>,
+            countryDetailsFragment.callingCodes?.map { callingCode -> callingCode?.name } as List<String>
+        )
     }
 
     override fun onCleared() {
