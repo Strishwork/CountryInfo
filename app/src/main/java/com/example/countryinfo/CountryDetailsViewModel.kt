@@ -40,18 +40,19 @@ class CountryDetailsViewModel(private val countryApi: ICountriesApi) : ViewModel
 
     @Suppress("UNCHECKED_CAST")
     private fun initCountryDetails(countryDetailsFragment: com.example.fragment.CountryDetails): CountryDetails {
-        return CountryDetails(
-            countryDetailsFragment.name,
-            countryDetailsFragment.capital,
-            countryDetailsFragment.subregion?.region?.name ?: "",
-            countryDetailsFragment.population,
-            countryDetailsFragment.flag?.svgFile ?: "",
-            countryDetailsFragment.currencies?.map { currencyName -> currencyName?.name } as List<String>,
-            countryDetailsFragment.currencies.map { currencySymbol -> currencySymbol?.symbol } as List<String>,
-            countryDetailsFragment.officialLanguages?.map { language -> language?.name } as List<String>,
-            countryDetailsFragment.timezones?.map { timezone -> timezone?.name } as List<String>,
-            countryDetailsFragment.callingCodes?.map { callingCode -> callingCode?.name } as List<String>
-        )
+        return with(countryDetailsFragment) {
+            CountryDetails(
+                name,
+                capital,
+                subregion?.region?.name ?: "",
+                population,
+                flag?.svgFile ?: "",
+                currencies?.map { currencyName -> currencyName?.name } as List<String>,
+                officialLanguages?.map { language -> language?.name } as List<String>,
+                timezones?.map { timezone -> timezone?.name } as List<String>,
+                callingCodes?.map { callingCode -> callingCode?.name } as List<String>
+            )
+        }
     }
 
     override fun onCleared() {
