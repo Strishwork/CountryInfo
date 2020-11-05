@@ -50,7 +50,7 @@ class CountryDetailsViewModel(private val countryApi: ICountriesApi) : ViewModel
                 currencies?.map { currencyName -> currencyName?.name } as List<String>,
                 officialLanguages?.map { language -> language?.name } as List<String>,
                 timezones?.map { timezone -> timezone?.name } as List<String>,
-                callingCodes?.map { callingCode -> callingCode?.name } as List<String>
+                callingCodes?.map { callingCode -> "+" + callingCode?.name } as List<String>
             )
         }
     }

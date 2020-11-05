@@ -7,7 +7,9 @@ import com.apollographql.apollo.exception.ApolloException
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 
-class CountriesPreviewViewModel(private val countryApi: ICountriesApi) : ViewModel() {
+class CountriesPreviewViewModel(
+    private val countryApi: ICountriesApi
+) : ViewModel() {
 
     init {
         getCountries()
@@ -29,6 +31,7 @@ class CountriesPreviewViewModel(private val countryApi: ICountriesApi) : ViewMod
                     else -> {
                         val countries = countriesDto.map { country ->
                             CountryPreview(
+                                country?.fragments?.countryPreview?._id ?: "0",
                                 country?.fragments?.countryPreview?.name ?: "",
                                 country?.fragments?.countryPreview?.capital ?: "",
                                 country?.fragments?.countryPreview?.flag?.svgFile ?: "",
@@ -41,7 +44,13 @@ class CountriesPreviewViewModel(private val countryApi: ICountriesApi) : ViewMod
             }
 
         disposable = countryObservable.subscribe(
-            { countries -> countriesMutableLiveData.postValue(CountriesPreviewViewState.Default(countries)) },
+            { countries ->
+                countriesMutableLiveData.postValue(
+                    CountriesPreviewViewState.Default(
+                        countries
+                    )
+                )
+            },
             { error -> countriesMutableLiveData.postValue(CountriesPreviewViewState.Error(error)) })
     }
 
