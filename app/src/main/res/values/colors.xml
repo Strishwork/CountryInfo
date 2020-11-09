@@ -12,5 +12,9 @@
     <color name="recycler_view_bg_color">#E5E5E5</color>
     <color name="choose_card_bg_color">#F1F1F1</color>
     <color name="toolbar_color">#80D6C28D</color>
+    <color name="details_color_blue">#A6E6FD</color>
+    <color name="details_color_green">#B9EAC3</color>
+    <color name="details_color_red">#FBD3C0</color>
+    <color name="details_color_yellow">#FFE4A4</color>
 
 </resources>

@@ -1,5 +1,6 @@
 package com.example.countryinfo
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,12 @@ class CountryPreviewFragment : Fragment() {
     private lateinit var rootView: View
     private lateinit var viewModel: CountriesPreviewViewModel
     private lateinit var adapter: CountryPreviewAdapter
+    private lateinit var listener: ItemClickedListener
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        listener = context as MainActivity
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,10 +67,16 @@ class CountryPreviewFragment : Fragment() {
     }
 
     private fun initializeRecyclerView() {
-        val recyclerView = rootView.recyclerView
+        val recyclerView = rootView.detailsRecyclerView
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        adapter = CountryPreviewAdapter(emptyList())
+        adapter = CountryPreviewAdapter(
+            emptyList()
+        ) { item -> listener.itemClicked(item) }
         recyclerView.adapter = adapter
+    }
+
+    interface ItemClickedListener {
+        fun itemClicked(id: String)
     }
 
 }

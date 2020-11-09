@@ -4,4 +4,5 @@
     <string name="capital_label">Capital</string>
     <string name="region_label">Region</string>
     <string name="choose_card_label">Choose a card :)</string>
+    <string name="truncate_dots">...</string>
 </resources>

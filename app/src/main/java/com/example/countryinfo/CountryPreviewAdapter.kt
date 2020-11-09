@@ -10,7 +10,8 @@ import com.github.twocoffeesoneteam.glidetovectoryou.GlideApp
 import kotlinx.android.synthetic.main.country_preview_card.view.*
 
 class CountryPreviewAdapter(
-    private var values: List<CountryPreview>
+    private var values: List<CountryPreview>,
+    private val listener: (String) -> Unit
 ) : RecyclerView.Adapter<CountryPreviewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -21,6 +22,7 @@ class CountryPreviewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(values[position])
+        holder.itemView.setOnClickListener { listener(values[position].id) }
     }
 
     override fun getItemCount(): Int = values.size
