@@ -48,61 +48,49 @@ class CountryDetailsViewModel(private val countryApi: ICountriesApi) : ViewModel
     }
 
     private fun setCountryStates(countryDetails: CountryDetails): List<DetailsViewHolderState> {
-        val state: MutableList<DetailsViewHolderState> = mutableListOf(DetailsViewHolderState())
-        state.clear()
-        state.add(
+        return listOf(
             DetailsViewHolderState(
                 DetailsSections.COUNTRY_NAME.title,
                 listOf(countryDetails.name),
-                false
-            )
-        )
-        state.add(
+                false,
+                DetailsSections.DEFAULT
+            ),
             DetailsViewHolderState(
                 DetailsSections.CAPITAL.title,
                 listOf(countryDetails.capital),
-                false
-            )
-        )
-        state.add(
+                false,
+                DetailsSections.DEFAULT
+            ),
             DetailsViewHolderState(
                 DetailsSections.REGION.title,
                 listOf(countryDetails.region),
-                false
-            )
-        )
-        state.add(
+                false,
+                DetailsSections.DEFAULT
+            ),
             DetailsViewHolderState(
                 DetailsSections.POPULATION.title,
                 listOf(formatPopulation(countryDetails.population)),
-                false
-            )
-        )
-        state.add(
+                false,
+                DetailsSections.DEFAULT
+            ),
             DetailsViewHolderState(
                 DetailsSections.CURRENCIES.title,
                 countryDetails.currencyNames,
                 true,
                 DetailsSections.CURRENCIES
-            )
-        )
-        state.add(
+            ),
             DetailsViewHolderState(
                 DetailsSections.LANGUAGES.title,
                 countryDetails.languages,
                 true,
                 DetailsSections.LANGUAGES
-            )
-        )
-        state.add(
+            ),
             DetailsViewHolderState(
                 DetailsSections.TIMEZONES.title,
                 formatTime(countryDetails.timezones),
                 true,
                 DetailsSections.TIMEZONES
-            )
-        )
-        state.add(
+            ),
             DetailsViewHolderState(
                 DetailsSections.CALLING_CODES.title,
                 countryDetails.callingCodes,
@@ -110,7 +98,6 @@ class CountryDetailsViewModel(private val countryApi: ICountriesApi) : ViewModel
                 DetailsSections.CALLING_CODES
             )
         )
-        return state.toList()
     }
 
     private fun formatPopulation(value: Double): String {
@@ -129,12 +116,10 @@ class CountryDetailsViewModel(private val countryApi: ICountriesApi) : ViewModel
         var s = ""
         for (i in value.indices) {
             if (value[i].length > 3) {
-                s = "GMT "
-                s += value[i][3] + " "
-                s += if (value[i].substring(4, 5).toInt() >= 10) {
-                    value[i].substring(4, 5)
+                s = if (value[i].substring(4, 5).toInt() >= 10) {
+                    "GMT ${value[i][3]} ${value[i].substring(4, 5)}"
                 } else {
-                    value[i][5]
+                    "GMT ${value[i][3]} ${value[i][5]}"
                 }
             }
             s += value[i].takeLast(3)

@@ -11,7 +11,6 @@ import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.countryinfo.model.CountriesApi
 import com.example.countryinfo.model.apolloClient
@@ -37,7 +36,6 @@ class CountryDetailsFragment : Fragment(), CountryDetailsAdapter.ViewHolder.OnIt
     ): View? {
         rootView = inflater.inflate(R.layout.country_details_fragment, container, false)
         recyclerView = rootView.detailsRecyclerView
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
         adapter = CountryDetailsAdapter(emptyList(), this)
         recyclerView.adapter = adapter
         return rootView
@@ -82,18 +80,14 @@ class CountryDetailsFragment : Fragment(), CountryDetailsAdapter.ViewHolder.OnIt
     }
 
     private fun showDialog(section: DetailsSections, dialogMessage: List<String>) {
-        val dialogBuilder = AlertDialog.Builder(requireContext())
-        var message = ""
-        for (i in dialogMessage.indices) {
-            message += dialogMessage[i] + "\n"
-        }
+        val dialogBuilder = AlertDialog.Builder(requireContext()).setTitle(section.title)
+        val message = dialogMessage.joinToString(separator = "\n")
         dialogBuilder.setMessage(message)
             .setCancelable(false)
             .setPositiveButton("Ok") { dialog, id ->
                 dialog.dismiss()
             }
         val alert = dialogBuilder.create()
-        alert.setTitle(section.title)
         alert.show()
     }
 

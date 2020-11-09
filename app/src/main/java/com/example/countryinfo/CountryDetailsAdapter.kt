@@ -3,6 +3,7 @@ package com.example.countryinfo
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.country_details_card.view.*
 
@@ -24,7 +25,7 @@ class CountryDetailsAdapter(
             holder.itemView.circleImage.setImageResource(R.drawable.circle2)
         }
         if (position == states.size - 1) {
-            holder.itemView.lineImage.visibility = View.GONE
+            holder.itemView.lineImage.isVisible = false
         }
         holder.bind(states[position])
     }
@@ -60,34 +61,22 @@ class CountryDetailsAdapter(
         fun bind(state: DetailsViewHolderState) {
             itemView.labelText.text = state.title
 
-            for (i in state.info.indices) {
-                if (i > 2)
-                    break
-                when (i) {
-                    0 -> {
-                        itemView.titleText.text = state.info[i]
-                        if (state.isInfoHighlighted) {
-                            itemView.titleText.setBackgroundResource(state.detailsSections.bgShapeId)
+            with(itemView) {
+                listOf(titleText, titleText2, titleText3).forEachIndexed { index, textView ->
+                    state.info.getOrNull(index)?.let {
+                        textView.apply {
+                            text = it
+                            setBackgroundResource(state.detailsSections.bgShapeId)
+                            isVisible = true
                         }
-                    }
-                    1 -> {
-                        itemView.titleText2.text = state.info[i]
-                        itemView.titleText2.setBackgroundResource(state.detailsSections.bgShapeId)
-                        itemView.titleText2.visibility = View.VISIBLE
-                        dialogMessage = state.info
-                        viewSection = state.detailsSections
-                        itemView.postDelayed({
-                            checkViewsWidth()
-                        }, 50)
-                    }
-                    2 -> {
-                        itemView.titleText3.text = state.info[i]
-                        itemView.titleText3.setBackgroundResource(state.detailsSections.bgShapeId)
-                        itemView.titleText3.visibility = View.VISIBLE
-                        itemView.postDelayed({
-                            checkViewsWidth()
-                        }, 50)
-                    }
+                        if (index == 0) {
+                            viewSection = null
+                        } else {
+                            viewSection = state.detailsSections
+                            dialogMessage = state.info
+                            itemView.post { checkViewsWidth() }
+                        }
+                    } ?: run { textView.isVisible = false }
                 }
             }
         }
@@ -100,20 +89,20 @@ class CountryDetailsAdapter(
             val view2 = itemView.titleText2.measuredWidth
             val view3 = itemView.titleText3.measuredWidth
             if (view1 + view2 > boundsWidth) {
-                itemView.titleText2.visibility = View.GONE
-                itemView.titleText3.visibility = View.GONE
-                itemView.truncateDots.visibility = View.VISIBLE
+                itemView.titleText2.isVisible = false
+                itemView.titleText3.isVisible = false
+                itemView.truncateDots.isVisible = true
                 return
-            } else if (view1 + view2 + view3 > boundsWidth
-            ) {
-                itemView.titleText3.visibility = View.GONE
-                itemView.truncateDots.visibility = View.VISIBLE
+            } else if (view1 + view2 + view3 > boundsWidth) {
+                itemView.titleText3.isVisible = false
+                itemView.truncateDots.isVisible = true
             }
         }
     }
 }
 
 enum class DetailsSections(val title: String, val bgShapeId: Int = 0) {
+    DEFAULT(""),
     COUNTRY_NAME("Country"),
     CAPITAL("Capital"),
     REGION("Region"),

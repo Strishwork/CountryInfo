@@ -1,13 +1,13 @@
 package com.example.countryinfo
 
 class CountryDetails(
-    val name: String = "",
-    val capital: String = "",
-    val region: String = "",
-    val population: Double = 0.0,
-    val flag: String = "",
-    val currencyNames: List<String> = emptyList(),
-    val languages: List<String> = emptyList(),
-    val timezones: List<String> = emptyList(),
-    val callingCodes: List<String> = emptyList()
+    val name: String,
+    val capital: String,
+    val region: String,
+    val population: Double,
+    val flag: String,
+    val currencyNames: List<String>,
+    val languages: List<String>,
+    val timezones: List<String>,
+    val callingCodes: List<String>
 )
