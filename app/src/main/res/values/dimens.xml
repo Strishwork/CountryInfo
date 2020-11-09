@@ -15,5 +15,6 @@
     <dimen name="choose_card_image_width">100dp</dimen>
     <dimen name="choose_card_image_height">100dp</dimen>
     <dimen name="garland_image_height">100dp</dimen>
+    <dimen name="titles_margin">8dp</dimen>
 
 </resources>

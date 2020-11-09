@@ -32,39 +32,63 @@
         app:layout_constraintStart_toEndOf="@+id/circleImage"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/titleText"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/titlesBounds"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:textColor="@color/primary_text_color"
-        android:textSize="@dimen/details_title_text_size"
-        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/circleImage"
-        app:layout_constraintTop_toBottomOf="@+id/labelText" />
+        app:layout_constraintTop_toBottomOf="@+id/labelText">
 
-    <TextView
-        android:id="@+id/titleText2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:textColor="@color/primary_text_color"
-        android:textSize="@dimen/details_title_text_size"
-        android:textStyle="bold"
-        android:visibility="gone"
-        app:layout_constraintStart_toEndOf="@+id/titleText"
-        app:layout_constraintTop_toTopOf="@+id/titleText" />
+        <TextView
+            android:id="@+id/titleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/primary_text_color"
+            android:textSize="@dimen/details_title_text_size"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/titleText3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:textColor="@color/primary_text_color"
-        android:textSize="@dimen/details_title_text_size"
-        android:textStyle="bold"
-        android:visibility="gone"
-        app:layout_constraintStart_toEndOf="@+id/titleText2"
-        app:layout_constraintTop_toTopOf="@+id/titleText2" />
+        <TextView
+            android:id="@+id/titleText2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/titles_margin"
+            android:textColor="@color/primary_text_color"
+            android:textSize="@dimen/details_title_text_size"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@+id/titleText"
+            app:layout_constraintTop_toTopOf="@+id/titleText" />
+
+        <TextView
+            android:id="@+id/titleText3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/titles_margin"
+            android:textColor="@color/primary_text_color"
+            android:textSize="@dimen/details_title_text_size"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@+id/titleText2"
+            app:layout_constraintTop_toTopOf="@+id/titleText2" />
+
+        <TextView
+            android:id="@+id/truncateDots"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/titles_margin"
+            android:text="@string/truncate_dots"
+            android:textColor="@color/primary_text_color"
+            android:textSize="@dimen/details_title_text_size"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

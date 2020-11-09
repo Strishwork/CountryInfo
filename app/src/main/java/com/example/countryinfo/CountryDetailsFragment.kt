@@ -6,10 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.countryinfo.model.CountriesApi
@@ -21,14 +22,12 @@ class CountryDetailsFragment : Fragment(), CountryDetailsAdapter.ViewHolder.OnIt
 
     companion object {
         private const val COUNTRY_ID = "country_id"
-        private const val DETAILS_DIALOG = "dialog"
         fun newInstance(countryId: String) = CountryDetailsFragment().apply {
             arguments = bundleOf(COUNTRY_ID to countryId)
         }
     }
 
     private lateinit var rootView: View
-    private lateinit var viewModel: CountryDetailsViewModel
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CountryDetailsAdapter
 
@@ -38,49 +37,64 @@ class CountryDetailsFragment : Fragment(), CountryDetailsAdapter.ViewHolder.OnIt
     ): View? {
         rootView = inflater.inflate(R.layout.country_details_fragment, container, false)
         recyclerView = rootView.detailsRecyclerView
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        adapter = CountryDetailsAdapter(emptyList(), this)
+        recyclerView.adapter = adapter
         return rootView
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val id = arguments?.get(COUNTRY_ID) as String
-        viewModel = ViewModelProvider(
-            this, CountryDetailsViewModelFactory(
+        val id = arguments?.get(COUNTRY_ID) as? String
+        val viewModel: CountryDetailsViewModel by viewModels {
+            CountryDetailsViewModelFactory(
                 CountriesApi(
-                    apolloClient(
-                        requireContext()
-                    )
+                    apolloClient(requireContext())
                 )
             )
-        )
-            .get(CountryDetailsViewModel::class.java)
+        }
         viewModel.pollLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            when (val countryDetailsViewState = it) {
-                is CountryDetailsViewState.Default -> {
-                    recyclerView.layoutManager = LinearLayoutManager(requireContext())
-                    adapter = CountryDetailsAdapter(countryDetailsViewState.countryDetails, this)
-                    recyclerView.adapter = adapter
-                    loadFlag(countryDetailsViewState.countryDetails)
-                }
-                is CountryDetailsViewState.Error -> {
-                    Toast.makeText(
-                        context,
-                        countryDetailsViewState.error.message,
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            }
+            handleState(it)
         })
-        viewModel.countryClicked(id)
+        if (id != null) {
+            viewModel.countryClicked(id)
+        }
     }
 
-    override fun onItemClick(state: DetailsStates, dialogMessage: List<String>) {
-        activity?.supportFragmentManager?.let {
-            CountryDetailsDialog.newInstance(
-                state,
-                ArrayList(dialogMessage)
-            ).show(it, DETAILS_DIALOG)
+    private fun handleState(countryDetailsViewState: CountryDetailsViewState) {
+        when (countryDetailsViewState) {
+            is CountryDetailsViewState.Default -> {
+                adapter.setCountryStates(countryDetailsViewState.detailsViewHolderStateList)
+                loadFlag(countryDetailsViewState.countryDetails)
+            }
+            is CountryDetailsViewState.Error -> {
+                Toast.makeText(
+                    context,
+                    countryDetailsViewState.error.message,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
         }
+    }
+
+    override fun onItemClick(section: DetailsSections, dialogMessage: List<String>) {
+        showDialog(section, dialogMessage)
+    }
+
+    private fun showDialog(section: DetailsSections, dialogMessage: List<String>) {
+        val dialogBuilder = AlertDialog.Builder(requireContext())
+        var message = ""
+        for (i in dialogMessage.indices) {
+            message += dialogMessage[i] + "\n"
+        }
+        dialogBuilder.setMessage(message)
+            .setCancelable(false)
+            .setPositiveButton("Ok") { dialog, id ->
+                dialog.dismiss()
+            }
+        val alert = dialogBuilder.create()
+        alert.setTitle(section.title)
+        alert.show()
     }
 
     private fun loadFlag(country: CountryDetails) {
