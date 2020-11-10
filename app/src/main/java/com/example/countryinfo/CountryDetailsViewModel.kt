@@ -11,7 +11,7 @@ import java.text.DecimalFormat
 class CountryDetailsViewModel(private val countryApi: ICountriesApi) : ViewModel() {
 
     private val countryMutableLiveData = MutableLiveData<CountryDetailsViewState>()
-    val pollLiveData: LiveData<CountryDetailsViewState> = countryMutableLiveData
+    val countryLiveData: LiveData<CountryDetailsViewState> = countryMutableLiveData
 
     private lateinit var disposable: Disposable
 
