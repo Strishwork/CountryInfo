@@ -11,15 +11,11 @@ class CountriesPreviewViewModel(
     private val countryApi: ICountriesApi
 ) : ViewModel() {
 
-    init {
-        getCountries()
-    }
-
     private val countriesMutableLiveData = MutableLiveData<CountriesPreviewViewState>()
-    val pollLiveData: LiveData<CountriesPreviewViewState> = countriesMutableLiveData
+    val countriesLiveData: LiveData<CountriesPreviewViewState> = countriesMutableLiveData
     private lateinit var disposable: Disposable
 
-    private fun getCountries() {
+    fun getCountries() {
         val countryObservable = countryApi.getCountries()
             .flatMap { response ->
                 val countriesDto = response.data?.country

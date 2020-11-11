@@ -11,7 +11,7 @@ import java.text.DecimalFormat
 class CountryDetailsViewModel(private val countryApi: ICountriesApi) : ViewModel() {
 
     private val countryMutableLiveData = MutableLiveData<CountryDetailsViewState>()
-    val pollLiveData: LiveData<CountryDetailsViewState> = countryMutableLiveData
+    val countryLiveData: LiveData<CountryDetailsViewState> = countryMutableLiveData
 
     private lateinit var disposable: Disposable
 
@@ -137,10 +137,10 @@ class CountryDetailsViewModel(private val countryApi: ICountriesApi) : ViewModel
                 subregion?.region?.name ?: "",
                 population,
                 flag?.svgFile ?: "",
-                currencies?.map { currencyName -> currencyName?.name } as List<String>,
-                officialLanguages?.map { language -> language?.name } as List<String>,
-                timezones?.map { timezone -> timezone?.name } as List<String>,
-                callingCodes?.map { callingCode -> "+" + callingCode?.name } as List<String>
+                currencies?.mapNotNull { currencyName -> currencyName?.name ?: "" } as List<String>,
+                officialLanguages?.mapNotNull { language -> language?.name ?: ""} as List<String>,
+                timezones?.mapNotNull { timezone -> timezone?.name ?: ""} as List<String>,
+                callingCodes?.mapNotNull { callingCode -> "+" + callingCode?.name ?: ""} as List<String>
             )
         }
     }
