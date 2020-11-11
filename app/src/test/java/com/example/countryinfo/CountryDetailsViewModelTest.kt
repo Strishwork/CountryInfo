@@ -66,7 +66,7 @@ class CountryDetailsViewModelTest {
         assertThat(actualState.countryDetails.flag, `is`("https://test.com"))
         assertThat(actualState.countryDetails.currencyNames[0], `is`("Test currency"))
         assertThat(actualState.countryDetails.languages[0], `is`("Test language"))
-        assertThat(actualState.countryDetails.timezones[0], `is`("UTC+03:00"))
+        assertThat(actualState.countryDetails.timezones[0], `is`("UTC+05:00"))
         assertThat(actualState.countryDetails.callingCodes[0], `is`("+380"))
     }
 
@@ -133,7 +133,7 @@ class CountryDetailsViewModelTest {
             `when`(flag?.svgFile).thenReturn("https://test.com")
             `when`(currencies).thenReturn(listOf(CountryDetails.Currency("", "Test currency", "")))
             `when`(officialLanguages).thenReturn(listOf(CountryDetails.OfficialLanguage("", "Test language")))
-            `when`(timezones).thenReturn(listOf(CountryDetails.Timezone("", "UTC+03:00")))
+            `when`(timezones).thenReturn(listOf(CountryDetails.Timezone("", "UTC+05:00")))
             `when`(callingCodes).thenReturn(listOf(CountryDetails.CallingCode("", "380")))
         }
         return mockCountryDetailsFragment
