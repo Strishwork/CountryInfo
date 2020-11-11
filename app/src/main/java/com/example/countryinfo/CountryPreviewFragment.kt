@@ -64,7 +64,6 @@ class CountryPreviewFragment : Fragment() {
                 }
             }
         })
-        viewModel.getCountries()
     }
 
     private fun initializeRecyclerView() {

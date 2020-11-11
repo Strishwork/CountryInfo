@@ -49,8 +49,6 @@ class CountriesPreviewViewModelTest {
         val mockObserver = mock(Observer::class.java) as Observer<CountriesPreviewViewState>
         viewModel.countriesLiveData.observeForever(mockObserver)
 
-        viewModel.getCountries()
-
         val argumentCaptor = ArgumentCaptor.forClass(CountriesPreviewViewState::class.java)
         Mockito.verify(mockObserver, Mockito.times(1)).onChanged(argumentCaptor.capture())
 
@@ -84,8 +82,6 @@ class CountriesPreviewViewModelTest {
         val mockObserver = mock(Observer::class.java) as Observer<CountriesPreviewViewState>
         viewModel.countriesLiveData.observeForever(mockObserver)
 
-        viewModel.getCountries()
-
         val argumentCaptor = ArgumentCaptor.forClass(CountriesPreviewViewState::class.java)
         Mockito.verify(mockObserver, Mockito.times(1)).onChanged(argumentCaptor.capture())
 
@@ -106,8 +102,6 @@ class CountriesPreviewViewModelTest {
 
         val mockObserver = mock(Observer::class.java) as Observer<CountriesPreviewViewState>
         viewModel.countriesLiveData.observeForever(mockObserver)
-
-        viewModel.getCountries()
 
         val argumentCaptor = ArgumentCaptor.forClass(CountriesPreviewViewState::class.java)
         Mockito.verify(mockObserver, Mockito.times(1)).onChanged(argumentCaptor.capture())

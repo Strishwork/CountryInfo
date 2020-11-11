@@ -64,10 +64,10 @@ class CountryDetailsViewModelTest {
         assertThat(actualState.countryDetails.region, `is`("Test subregion name"))
         assertThat(actualState.countryDetails.population, `is`(1_000_000.0))
         assertThat(actualState.countryDetails.flag, `is`("https://test.com"))
-        assertThat(actualState.countryDetails.currencyNames, `is`(listOf()))
-        assertThat(actualState.countryDetails.languages, `is`(listOf()))
-        assertThat(actualState.countryDetails.timezones, `is`(listOf()))
-        assertThat(actualState.countryDetails.callingCodes, `is`(listOf()))
+        assertThat(actualState.countryDetails.currencyNames[0], `is`("Test currency"))
+        assertThat(actualState.countryDetails.languages[0], `is`("Test language"))
+        assertThat(actualState.countryDetails.timezones[0], `is`("UTC+03:00"))
+        assertThat(actualState.countryDetails.callingCodes[0], `is`("+380"))
     }
 
     @Test
@@ -131,10 +131,10 @@ class CountryDetailsViewModelTest {
             `when`(subregion?.region?.name).thenReturn("Test subregion name")
             `when`(population).thenReturn(1_000_000.0)
             `when`(flag?.svgFile).thenReturn("https://test.com")
-            `when`(currencies).thenReturn(listOf())
-            `when`(officialLanguages).thenReturn(listOf())
-            `when`(timezones).thenReturn(listOf())
-            `when`(callingCodes).thenReturn(listOf())
+            `when`(currencies).thenReturn(listOf(CountryDetails.Currency("", "Test currency", "")))
+            `when`(officialLanguages).thenReturn(listOf(CountryDetails.OfficialLanguage("", "Test language")))
+            `when`(timezones).thenReturn(listOf(CountryDetails.Timezone("", "UTC+03:00")))
+            `when`(callingCodes).thenReturn(listOf(CountryDetails.CallingCode("", "380")))
         }
         return mockCountryDetailsFragment
     }
