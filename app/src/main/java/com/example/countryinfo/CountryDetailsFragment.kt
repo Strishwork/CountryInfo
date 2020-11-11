@@ -51,7 +51,7 @@ class CountryDetailsFragment : Fragment(), CountryDetailsAdapter.ViewHolder.OnIt
                 )
             )
         }
-        viewModel.pollLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+        viewModel.countryLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             handleState(it)
         })
         if (id != null) {

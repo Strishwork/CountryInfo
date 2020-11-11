@@ -50,7 +50,7 @@ class CountryPreviewFragment : Fragment() {
             )
         )
             .get(CountriesPreviewViewModel::class.java)
-        viewModel.pollLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+        viewModel.countriesLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             when (val countriesPreviewViewState = it) {
                 is CountriesPreviewViewState.Default -> {
                     adapter.updateAdapterValues(countriesPreviewViewState.countries)

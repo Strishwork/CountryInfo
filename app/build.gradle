@@ -66,6 +66,8 @@ dependencies {
 
     implementation 'com.github.corouteam:GlideToVectorYou:v2.0.0'
 
+    testImplementation 'org.mockito:mockito-inline:3.5.15'
+    testImplementation "androidx.arch.core:core-testing:2.1.0"
     testImplementation 'junit:junit:4.13.1'
     testImplementation 'org.mockito:mockito-core:3.5.15'
     testImplementation 'org.hamcrest:hamcrest-library:1.3'
