@@ -12,10 +12,9 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
-import com.example.countryinfo.model.CountriesApi
-import com.example.countryinfo.model.apolloClient
 import com.github.twocoffeesoneteam.glidetovectoryou.GlideApp
 import kotlinx.android.synthetic.main.country_details_fragment.view.*
+import javax.inject.Inject
 
 class CountryDetailsFragment : Fragment(), CountryDetailsAdapter.ViewHolder.OnItemClickListener {
 
@@ -30,6 +29,9 @@ class CountryDetailsFragment : Fragment(), CountryDetailsAdapter.ViewHolder.OnIt
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CountryDetailsAdapter
 
+    @Inject
+    lateinit var viewModelFactory: CountryDetailsViewModelFactory
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,19 +40,14 @@ class CountryDetailsFragment : Fragment(), CountryDetailsAdapter.ViewHolder.OnIt
         recyclerView = rootView.detailsRecyclerView
         adapter = CountryDetailsAdapter(emptyList(), this)
         recyclerView.adapter = adapter
+        (activity?.application as CountriesApplication).countriesComponent.inject(this)
         return rootView
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val id = arguments?.get(COUNTRY_ID) as? String
-        val viewModel: CountryDetailsViewModel by viewModels {
-            CountryDetailsViewModelFactory(
-                CountriesApi(
-                    apolloClient(requireContext())
-                )
-            )
-        }
+        val viewModel: CountryDetailsViewModel by viewModels { viewModelFactory }
         viewModel.countryLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             handleState(it)
         })

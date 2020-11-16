@@ -7,11 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.countryinfo.model.CountriesApi
-import com.example.countryinfo.model.apolloClient
 import kotlinx.android.synthetic.main.country_preview_layout.view.*
+import javax.inject.Inject
 
 class CountryPreviewFragment : Fragment() {
 
@@ -20,9 +19,11 @@ class CountryPreviewFragment : Fragment() {
     }
 
     private lateinit var rootView: View
-    private lateinit var viewModel: CountriesPreviewViewModel
     private lateinit var adapter: CountryPreviewAdapter
     private lateinit var listener: ItemClickedListener
+
+    @Inject
+    lateinit var viewModelFactory: CountriesPreviewViewModelFactory
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -35,21 +36,13 @@ class CountryPreviewFragment : Fragment() {
     ): View? {
         rootView = inflater.inflate(R.layout.country_preview_layout, container, false)
         initializeRecyclerView()
+        (activity?.application as CountriesApplication).countriesComponent.inject(this)
         return rootView
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(
-            this, CountriesPreviewViewModelFactory(
-                CountriesApi(
-                    apolloClient(
-                        requireContext()
-                    )
-                )
-            )
-        )
-            .get(CountriesPreviewViewModel::class.java)
+        val viewModel: CountriesPreviewViewModel by viewModels { viewModelFactory }
         viewModel.countriesLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             when (val countriesPreviewViewState = it) {
                 is CountriesPreviewViewState.Default -> {
