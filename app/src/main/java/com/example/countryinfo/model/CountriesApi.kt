@@ -8,6 +8,7 @@ import com.example.GetCountriesQuery
 import com.example.GetCountryByIdQuery
 import com.example.countryinfo.ICountriesApi
 import io.reactivex.Observable
+import javax.inject.Inject
 
 class CountriesApi(private val apolloClient: ApolloClient) :
     ICountriesApi {
