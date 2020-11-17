@@ -31,6 +31,7 @@ class CountryDetailsFragment : Fragment(), CountryDetailsAdapter.ViewHolder.OnIt
 
     @Inject
     lateinit var viewModelFactory: CountryDetailsViewModelFactory
+    private val viewModel: CountryDetailsViewModel by viewModels { viewModelFactory }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,7 +48,6 @@ class CountryDetailsFragment : Fragment(), CountryDetailsAdapter.ViewHolder.OnIt
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val id = arguments?.get(COUNTRY_ID) as? String
-        val viewModel: CountryDetailsViewModel by viewModels { viewModelFactory }
         viewModel.countryLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             handleState(it)
         })

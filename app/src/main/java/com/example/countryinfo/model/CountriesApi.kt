@@ -10,7 +10,7 @@ import com.example.countryinfo.ICountriesApi
 import io.reactivex.Observable
 import javax.inject.Inject
 
-class CountriesApi @Inject constructor(private val apolloClient: ApolloClient) :
+class CountriesApi(private val apolloClient: ApolloClient) :
     ICountriesApi {
 
     override fun getCountries(): Observable<Response<GetCountriesQuery.Data>> {

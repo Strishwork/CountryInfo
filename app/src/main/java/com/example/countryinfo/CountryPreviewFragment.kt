@@ -24,6 +24,7 @@ class CountryPreviewFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: CountriesPreviewViewModelFactory
+    private val viewModel: CountriesPreviewViewModel by viewModels { viewModelFactory }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -42,7 +43,6 @@ class CountryPreviewFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val viewModel: CountriesPreviewViewModel by viewModels { viewModelFactory }
         viewModel.countriesLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             when (val countriesPreviewViewState = it) {
                 is CountriesPreviewViewState.Default -> {
