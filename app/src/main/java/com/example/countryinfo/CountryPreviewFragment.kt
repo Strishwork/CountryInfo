@@ -28,7 +28,9 @@ class CountryPreviewFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        listener = context as MainActivity
+        if (context is MainActivity) {
+            listener = context
+        }
     }
 
     override fun onCreateView(
@@ -43,6 +45,7 @@ class CountryPreviewFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        EspressoIdlingResource.increment()
         viewModel.countriesLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             when (val countriesPreviewViewState = it) {
                 is CountriesPreviewViewState.Default -> {
@@ -56,6 +59,7 @@ class CountryPreviewFragment : Fragment() {
                     ).show()
                 }
             }
+            EspressoIdlingResource.decrement()
         })
     }
 

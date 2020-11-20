@@ -50,8 +50,10 @@ class CountryDetailsFragment : Fragment(), CountryDetailsAdapter.ViewHolder.OnIt
         val id = arguments?.get(COUNTRY_ID) as? String
         viewModel.countryLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             handleState(it)
+            EspressoIdlingResource.decrement()
         })
         if (id != null) {
+            EspressoIdlingResource.increment()
             viewModel.countryClicked(id)
         }
     }

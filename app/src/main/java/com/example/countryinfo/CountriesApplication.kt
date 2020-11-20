@@ -5,7 +5,7 @@ import com.example.countryinfo.dagger.AppComponent
 import com.example.countryinfo.dagger.AppModule
 import com.example.countryinfo.dagger.DaggerAppComponent
 
-class CountriesApplication : Application() {
+open class CountriesApplication : Application() {
 
     lateinit var countriesComponent: AppComponent
 
@@ -14,7 +14,7 @@ class CountriesApplication : Application() {
         countriesComponent = initDagger(this)
     }
 
-    private fun initDagger(app: CountriesApplication): AppComponent =
+    protected open fun initDagger(app: CountriesApplication): AppComponent =
         DaggerAppComponent.builder()
             .appModule(AppModule(app))
             .build()
