@@ -3,7 +3,7 @@ package com.example.countryinfo
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
-class CountryDetailsViewModelFactory(
+open class CountryDetailsViewModelFactory(
     private val countryApi: ICountriesApi
 ) : ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

@@ -8,7 +8,7 @@ import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import java.text.DecimalFormat
 
-class CountryDetailsViewModel(private val countryApi: ICountriesApi) : ViewModel() {
+open class CountryDetailsViewModel(private val countryApi: ICountriesApi) : ViewModel() {
 
     private val countryMutableLiveData = MutableLiveData<CountryDetailsViewState>()
     val countryLiveData: LiveData<CountryDetailsViewState> = countryMutableLiveData

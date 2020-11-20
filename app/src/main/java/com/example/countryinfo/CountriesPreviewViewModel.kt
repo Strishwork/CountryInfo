@@ -7,7 +7,7 @@ import com.apollographql.apollo.exception.ApolloException
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 
-class CountriesPreviewViewModel(
+open class CountriesPreviewViewModel(
     private val countryApi: ICountriesApi
 ) : ViewModel() {
 
