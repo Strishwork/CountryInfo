@@ -45,7 +45,6 @@ class CountryPreviewFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        EspressoIdlingResource.increment()
         viewModel.countriesLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             when (val countriesPreviewViewState = it) {
                 is CountriesPreviewViewState.Default -> {
@@ -59,7 +58,6 @@ class CountryPreviewFragment : Fragment() {
                     ).show()
                 }
             }
-            EspressoIdlingResource.decrement()
         })
     }
 

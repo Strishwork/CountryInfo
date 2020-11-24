@@ -12,7 +12,7 @@ open class CountriesPreviewViewModel(
 ) : ViewModel() {
 
     private val countriesMutableLiveData = MutableLiveData<CountriesPreviewViewState>()
-    val countriesLiveData: LiveData<CountriesPreviewViewState> = countriesMutableLiveData
+    open val countriesLiveData: LiveData<CountriesPreviewViewState> = countriesMutableLiveData
     private lateinit var disposable: Disposable
 
     init {

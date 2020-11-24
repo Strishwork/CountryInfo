@@ -50,10 +50,8 @@ class CountryDetailsFragment : Fragment(), CountryDetailsAdapter.ViewHolder.OnIt
         val id = arguments?.get(COUNTRY_ID) as? String
         viewModel.countryLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             handleState(it)
-            EspressoIdlingResource.decrement()
         })
         if (id != null) {
-            EspressoIdlingResource.increment()
             viewModel.countryClicked(id)
         }
     }
@@ -79,7 +77,9 @@ class CountryDetailsFragment : Fragment(), CountryDetailsAdapter.ViewHolder.OnIt
     }
 
     private fun showDialog(section: DetailsSections, dialogMessage: List<String>) {
-        val dialogBuilder = AlertDialog.Builder(requireContext()).setTitle(section.title)
+        val dialogBuilder =
+            AlertDialog.Builder(requireContext())
+                .setTitle(section.title)
         val message = dialogMessage.joinToString(separator = "\n")
         dialogBuilder.setMessage(message)
             .setCancelable(false)

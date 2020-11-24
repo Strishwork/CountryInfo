@@ -1,6 +1,6 @@
 package com.example.countryinfo
 
-class CountryPreview(
+data class CountryPreview(
     val id: String,
     val countryName: String,
     val capital: String,

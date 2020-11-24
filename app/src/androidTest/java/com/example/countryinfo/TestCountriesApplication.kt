@@ -5,10 +5,13 @@ import com.example.countryinfo.dagger.AppModule
 
 class TestCountriesApplication : CountriesApplication() {
 
+    lateinit var testCountriesComponent: TestAppComponent
+
     override fun initDagger(app: CountriesApplication): AppComponent {
-        return DaggerTestAppComponent
+        testCountriesComponent = DaggerTestAppComponent
             .builder()
             .appModule(AppModule(app))
             .build()
+        return testCountriesComponent
     }
 }
