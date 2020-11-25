@@ -11,5 +11,6 @@ interface TestAppComponent : AppComponent {
 
     fun inject(target: CountryDetailsFragmentTest)
     fun inject(target: CountryPreviewFragmentTest)
+    fun inject(target: FragmentNavigationTest)
 
 }
