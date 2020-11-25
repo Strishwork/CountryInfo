@@ -28,7 +28,9 @@ class CountryPreviewFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        listener = context as MainActivity
+        if (context is ItemClickedListener) {
+            listener = context
+        }
     }
 
     override fun onCreateView(

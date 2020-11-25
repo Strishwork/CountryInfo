@@ -73,17 +73,18 @@ class CountryDetailsFragment : Fragment(), CountryDetailsAdapter.ViewHolder.OnIt
     }
 
     override fun onItemClick(section: DetailsSections, dialogMessage: List<String>) {
-        showDialog(section, dialogMessage)
+        showDialog(section.title, dialogMessage.joinToString(separator = "\n"))
     }
 
-    private fun showDialog(section: DetailsSections, dialogMessage: List<String>) {
-        val dialogBuilder = AlertDialog.Builder(requireContext()).setTitle(section.title)
-        val message = dialogMessage.joinToString(separator = "\n")
-        dialogBuilder.setMessage(message)
-            .setCancelable(false)
-            .setPositiveButton("Ok") { dialog, id ->
-                dialog.dismiss()
-            }
+    private fun showDialog(title: String, dialogMessage: String) {
+        val dialogBuilder =
+            AlertDialog.Builder(requireContext())
+                .setTitle(title)
+                .setMessage(dialogMessage)
+                .setCancelable(false)
+                .setPositiveButton("Ok") { dialog, id ->
+                    dialog.dismiss()
+                }
         val alert = dialogBuilder.create()
         alert.show()
     }

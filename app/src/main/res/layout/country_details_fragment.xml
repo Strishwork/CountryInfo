@@ -26,6 +26,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
+                android:id="@+id/garlandImageView"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/garland_image_height"
                 android:layout_marginTop="60dp"
