@@ -1,4 +1,4 @@
-package com.example.countryinfo.model
+package com.example.api
 
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.Response
@@ -6,9 +6,7 @@ import com.apollographql.apollo.api.toInput
 import com.apollographql.apollo.rx2.rxQuery
 import com.example.GetCountriesQuery
 import com.example.GetCountryByIdQuery
-import com.example.countryinfo.ICountriesApi
 import io.reactivex.Observable
-import javax.inject.Inject
 
 class CountriesApi(private val apolloClient: ApolloClient) :
     ICountriesApi {

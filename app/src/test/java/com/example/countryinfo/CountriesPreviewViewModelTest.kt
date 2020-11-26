@@ -5,6 +5,7 @@ import androidx.lifecycle.Observer
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.exception.ApolloException
 import com.example.GetCountriesQuery
+import com.example.api.ICountriesApi
 import io.reactivex.Observable
 import org.hamcrest.core.Is.`is`
 import org.junit.Assert

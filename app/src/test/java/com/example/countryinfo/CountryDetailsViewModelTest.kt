@@ -5,6 +5,7 @@ import androidx.lifecycle.Observer
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.exception.ApolloException
 import com.example.GetCountryByIdQuery
+import com.example.api.ICountriesApi
 import com.example.fragment.CountryDetails
 import io.reactivex.Observable
 import org.hamcrest.core.Is.`is`
@@ -132,7 +133,14 @@ class CountryDetailsViewModelTest {
             `when`(population).thenReturn(1_000_000.0)
             `when`(flag?.svgFile).thenReturn("https://test.com")
             `when`(currencies).thenReturn(listOf(CountryDetails.Currency("", "Test currency", "")))
-            `when`(officialLanguages).thenReturn(listOf(CountryDetails.OfficialLanguage("", "Test language")))
+            `when`(officialLanguages).thenReturn(
+                listOf(
+                    CountryDetails.OfficialLanguage(
+                        "",
+                        "Test language"
+                    )
+                )
+            )
             `when`(timezones).thenReturn(listOf(CountryDetails.Timezone("", "UTC+03:00")))
             `when`(callingCodes).thenReturn(listOf(CountryDetails.CallingCode("", "380")))
         }

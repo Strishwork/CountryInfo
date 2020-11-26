@@ -5,6 +5,7 @@ import org.junit.runners.Suite
 
 @RunWith(Suite::class)
 @Suite.SuiteClasses(
+    FragmentNavigationTest::class,
     CountryDetailsFragmentTest::class,
     CountryPreviewFragmentTest::class
 )
