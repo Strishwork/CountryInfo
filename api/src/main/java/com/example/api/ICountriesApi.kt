@@ -1,4 +1,4 @@
-package com.example.countryinfo
+package com.example.api
 
 import com.apollographql.apollo.api.Response
 import com.example.GetCountriesQuery

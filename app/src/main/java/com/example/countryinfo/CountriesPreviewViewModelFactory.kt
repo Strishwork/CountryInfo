@@ -2,6 +2,7 @@ package com.example.countryinfo
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.api.ICountriesApi
 
 open class CountriesPreviewViewModelFactory(
     private val countryApi: ICountriesApi

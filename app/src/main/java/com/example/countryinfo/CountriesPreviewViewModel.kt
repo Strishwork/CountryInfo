@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.apollographql.apollo.exception.ApolloException
+import com.example.api.ICountriesApi
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 

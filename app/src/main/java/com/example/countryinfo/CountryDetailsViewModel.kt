@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.apollographql.apollo.exception.ApolloException
+import com.example.api.ICountriesApi
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import java.text.DecimalFormat
@@ -138,9 +139,11 @@ open class CountryDetailsViewModel(private val countryApi: ICountriesApi) : View
                 population,
                 flag?.svgFile ?: "",
                 currencies?.mapNotNull { currencyName -> currencyName?.name ?: "" } as List<String>,
-                officialLanguages?.mapNotNull { language -> language?.name ?: ""} as List<String>,
-                timezones?.mapNotNull { timezone -> timezone?.name ?: ""} as List<String>,
-                callingCodes?.mapNotNull { callingCode -> "+" + callingCode?.name ?: ""} as List<String>
+                officialLanguages?.mapNotNull { language -> language?.name ?: "" } as List<String>,
+                timezones?.mapNotNull { timezone -> timezone?.name ?: "" } as List<String>,
+                callingCodes?.mapNotNull { callingCode ->
+                    "+" + callingCode?.name ?: ""
+                } as List<String>
             )
         }
     }

@@ -2,7 +2,7 @@ package com.example.countryinfo.dagger
 
 import com.example.countryinfo.CountriesPreviewViewModelFactory
 import com.example.countryinfo.CountryDetailsViewModelFactory
-import com.example.countryinfo.ICountriesApi
+import com.example.api.ICountriesApi
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

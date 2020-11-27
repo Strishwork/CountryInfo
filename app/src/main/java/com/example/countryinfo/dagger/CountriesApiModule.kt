@@ -2,8 +2,8 @@ package com.example.countryinfo.dagger
 
 import android.os.Looper
 import com.apollographql.apollo.ApolloClient
-import com.example.countryinfo.ICountriesApi
-import com.example.countryinfo.model.CountriesApi
+import com.example.api.ICountriesApi
+import com.example.api.CountriesApi
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
