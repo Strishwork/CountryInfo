@@ -34,13 +34,13 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-    implementation 'com.apollographql.apollo:apollo-runtime:2.4.1'
-    implementation 'com.apollographql.apollo:apollo-rx2-support:2.4.1'
+    implementation "com.apollographql.apollo:apollo-runtime:$apollo_version"
+    implementation "com.apollographql.apollo:apollo-rx2-support:$apollo_version"
 
     testImplementation "org.mockito:mockito-inline:$mockito_version"
     testImplementation "org.mockito:mockito-core:$mockito_version"
-    testImplementation "androidx.arch.core:core-testing:2.1.0"
-    testImplementation 'junit:junit:4.13.1'
+    testImplementation "androidx.arch.core:core-testing:$core_testing_version"
+    testImplementation "junit:junit:$jUnit_test_version"
 }
 
 apollo {
