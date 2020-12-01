@@ -39,20 +39,8 @@ class CountryDetailsAdapter(
         notifyDataSetChanged()
     }
 
-    class ViewHolder(
-        view: View, private val listener: OnItemClickListener
-    ) : RecyclerView.ViewHolder(view), View.OnClickListener {
-
-        var viewSection: DetailsSections? = null
-        var dialogMessage = emptyList<String>()
-
-        init {
-            itemView.setOnClickListener(this)
-        }
-
-        override fun onClick(v: View?) {
-            viewSection?.let { listener.onItemClick(it, dialogMessage) }
-        }
+    class ViewHolder(view: View, private val listener: OnItemClickListener) :
+        RecyclerView.ViewHolder(view) {
 
         interface OnItemClickListener {
             fun onItemClick(section: DetailsSections, dialogMessage: List<String>)
@@ -64,38 +52,43 @@ class CountryDetailsAdapter(
             with(itemView) {
                 listOf(titleText, titleText2, titleText3).forEachIndexed { index, textView ->
                     state.info.getOrNull(index)?.let {
+                        if (index == 1) {
+                            setMyOnClickListener(state.detailsSections, state.info)
+                        }
                         textView.apply {
                             text = it
                             setBackgroundResource(state.detailsSections.bgShapeId)
-                            isVisible = true
                         }
-                        if (index == 0) {
-                            viewSection = null
-                        } else {
-                            viewSection = state.detailsSections
-                            dialogMessage = state.info
-                            itemView.post { checkViewsWidth() }
-                        }
-                    } ?: run { textView.isVisible = false }
+                    }
                 }
+                itemView.post { checkViewsWidth() }
             }
         }
 
         private fun checkViewsWidth() {
             val boundsWidth =
-                itemView.titlesBounds.measuredWidth - itemView.context.resources.getDimension(R.dimen.titles_margin)
-                    .toInt()
-            val view1 = itemView.titleText.measuredWidth
-            val view2 = itemView.titleText2.measuredWidth
-            val view3 = itemView.titleText3.measuredWidth
-            if (view1 + view2 > boundsWidth) {
-                itemView.titleText2.isVisible = false
-                itemView.titleText3.isVisible = false
-                itemView.truncateDots.isVisible = true
-                return
-            } else if (view1 + view2 + view3 > boundsWidth) {
-                itemView.titleText3.isVisible = false
-                itemView.truncateDots.isVisible = true
+                itemView.titlesBounds.measuredWidth -
+                        (itemView.titlesBounds.layoutParams as ViewGroup.MarginLayoutParams).marginStart
+            var currentWidth = itemView.titleText.measuredWidth
+            val titleTextViews = listOf(itemView.titleText2, itemView.titleText3)
+            for (i in titleTextViews.indices) {
+                if (titleTextViews[i].measuredWidth + currentWidth < boundsWidth) {
+                    titleTextViews[i].isVisible = true
+                    currentWidth += titleTextViews[i].measuredWidth
+                } else {
+                    titleTextViews[i].isVisible = false
+                    itemView.truncateDots.isVisible = true
+                    return
+                }
+            }
+        }
+
+        private fun setMyOnClickListener(detailsSection: DetailsSections, message: List<String>) {
+            itemView.setOnClickListener {
+                listener.onItemClick(
+                    detailsSection,
+                    message
+                )
             }
         }
     }

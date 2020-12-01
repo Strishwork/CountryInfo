@@ -59,7 +59,7 @@
             android:textColor="@color/primary_text_color"
             android:textSize="@dimen/details_title_text_size"
             android:textStyle="bold"
-            android:visibility="gone"
+            android:visibility="invisible"
             app:layout_constraintStart_toEndOf="@+id/titleText"
             app:layout_constraintTop_toTopOf="@+id/titleText" />
 
@@ -71,7 +71,7 @@
             android:textColor="@color/primary_text_color"
             android:textSize="@dimen/details_title_text_size"
             android:textStyle="bold"
-            android:visibility="gone"
+            android:visibility="invisible"
             app:layout_constraintStart_toEndOf="@+id/titleText2"
             app:layout_constraintTop_toTopOf="@+id/titleText2" />
 
@@ -84,7 +84,7 @@
             android:textColor="@color/primary_text_color"
             android:textSize="@dimen/details_title_text_size"
             android:textStyle="bold"
-            android:visibility="gone"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
