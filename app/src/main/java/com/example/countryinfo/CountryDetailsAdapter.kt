@@ -49,7 +49,6 @@ class CountryDetailsAdapter(
         fun bind(state: DetailsViewHolderState) {
             itemView.labelText.text = state.title
             itemView.truncateDots.isVisible = false
-            setMyOnClickListener(null)
 
             titles.forEachIndexed { index, textView ->
                 state.info.getOrNull(index)?.let {
@@ -62,16 +61,18 @@ class CountryDetailsAdapter(
                             setBackgroundResource(state.detailsSections.bgShapeId)
                         }
                     }
-                    if (index != 0) {
-                        checkViewsWidth(itemView)
-                    }
-                    if (index == 1) {
-                        /*Setting clickListener only once per view and
-                        only if it has more than one value*/
-                        setMyOnClickListener(state)
-                    }
                 }
             }
+            if (state.info.size > 1) {
+                itemView.setOnClickListener { listener.onItemClick(state) }
+                checkViewsWidth(itemView)
+            } else {
+                itemView.setOnClickListener(null)
+                for (i in 1 until titles.size){
+                    titles[i].text = ""
+                }
+            }
+
         }
 
         private fun checkViewsWidth(itemView: View) {
@@ -97,14 +98,6 @@ class CountryDetailsAdapter(
                     titles[i].isVisible = false
                     itemView.truncateDots.isVisible = true
                 }
-            }
-        }
-
-        private fun setMyOnClickListener(state: DetailsViewHolderState?) {
-            if (state == null) {
-                itemView.setOnClickListener(null)
-            } else {
-                itemView.setOnClickListener { listener.onItemClick(state) }
             }
         }
     }
