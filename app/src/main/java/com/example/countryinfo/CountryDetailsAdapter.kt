@@ -24,9 +24,7 @@ class CountryDetailsAdapter(
         } else {
             holder.itemView.circleImage.setImageResource(R.drawable.circle2)
         }
-        if (position == states.size - 1) {
-            holder.itemView.lineImage.isVisible = false
-        }
+        holder.itemView.lineImage.isVisible = position != states.size - 1
         holder.bind(states[position])
     }
 
@@ -42,53 +40,71 @@ class CountryDetailsAdapter(
     class ViewHolder(view: View, private val listener: OnItemClickListener) :
         RecyclerView.ViewHolder(view) {
 
+        private val titles = listOf(itemView.titleText, itemView.titleText2, itemView.titleText3)
+
         interface OnItemClickListener {
-            fun onItemClick(section: DetailsSections, dialogMessage: List<String>)
+            fun onItemClick(state: DetailsViewHolderState)
         }
 
         fun bind(state: DetailsViewHolderState) {
             itemView.labelText.text = state.title
+            itemView.truncateDots.isVisible = false
+            setMyOnClickListener(null)
 
-            with(itemView) {
-                listOf(titleText, titleText2, titleText3).forEachIndexed { index, textView ->
-                    state.info.getOrNull(index)?.let {
-                        if (index == 1) {
-                            setMyOnClickListener(state.detailsSections, state.info)
-                        }
-                        textView.apply {
-                            text = it
+            titles.forEachIndexed { index, textView ->
+                state.info.getOrNull(index)?.let {
+                    textView.apply {
+                        text = it
+                        if (state.detailsSections.bgShapeId == 0) {
+                            setBackgroundResource(0)
+                            textView.setPadding(0, 0, 0, 0)
+                        } else {
                             setBackgroundResource(state.detailsSections.bgShapeId)
                         }
                     }
+                    if (index != 0) {
+                        checkViewsWidth(itemView)
+                    }
+                    if (index == 1) {
+                        /*Setting clickListener only once per view and
+                        only if it has more than one value*/
+                        setMyOnClickListener(state)
+                    }
                 }
-                itemView.post { checkViewsWidth() }
             }
         }
 
-        private fun checkViewsWidth() {
+        private fun checkViewsWidth(itemView: View) {
             val boundsWidth =
                 itemView.titlesBounds.measuredWidth -
                         (itemView.titlesBounds.layoutParams as ViewGroup.MarginLayoutParams).marginStart
+            itemView.titleText.measure(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
             var currentWidth = itemView.titleText.measuredWidth
-            val titleTextViews = listOf(itemView.titleText2, itemView.titleText3)
-            for (i in titleTextViews.indices) {
-                if (titleTextViews[i].measuredWidth + currentWidth < boundsWidth) {
-                    titleTextViews[i].isVisible = true
-                    currentWidth += titleTextViews[i].measuredWidth
+            for (i in 1 until titles.size) {
+                /*Starting from 1 because first titleText has to be
+                 measured earlier in order to return correct value*/
+                titles[i].measure(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+                currentWidth += titles[i].measuredWidth
+                if (currentWidth < boundsWidth) {
+                    titles[i].isVisible = titles[i].text != ""
                 } else {
-                    titleTextViews[i].isVisible = false
+                    titles[i].isVisible = false
                     itemView.truncateDots.isVisible = true
-                    return
                 }
             }
         }
 
-        private fun setMyOnClickListener(detailsSection: DetailsSections, message: List<String>) {
-            itemView.setOnClickListener {
-                listener.onItemClick(
-                    detailsSection,
-                    message
-                )
+        private fun setMyOnClickListener(state: DetailsViewHolderState?) {
+            if (state == null) {
+                itemView.setOnClickListener(null)
+            } else {
+                itemView.setOnClickListener { listener.onItemClick(state) }
             }
         }
     }

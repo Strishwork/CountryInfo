@@ -72,8 +72,8 @@ class CountryDetailsFragment : Fragment(), CountryDetailsAdapter.ViewHolder.OnIt
         }
     }
 
-    override fun onItemClick(section: DetailsSections, dialogMessage: List<String>) {
-        showDialog(section.title, dialogMessage.joinToString(separator = "\n"))
+    override fun onItemClick(state: DetailsViewHolderState) {
+        showDialog(state.detailsSections.title, state.info.joinToString(separator = "\n"))
     }
 
     private fun showDialog(title: String, dialogMessage: String) {
