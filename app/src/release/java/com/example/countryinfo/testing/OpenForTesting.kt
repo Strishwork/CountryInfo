@@ -1,0 +1,4 @@
+package com.example.countryinfo.testing
+
+@Target(AnnotationTarget.CLASS)
+annotation class OpenForTesting
