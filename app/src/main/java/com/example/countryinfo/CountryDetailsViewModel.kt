@@ -5,18 +5,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.apollographql.apollo.exception.ApolloException
 import com.example.api.ICountriesApi
+import com.example.countryinfo.testing.OpenForTesting
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import java.text.DecimalFormat
-
-open class CountryDetailsViewModel(private val countryApi: ICountriesApi) : ViewModel() {
+@OpenForTesting
+class CountryDetailsViewModel(private val countryApi: ICountriesApi) : ViewModel() {
 
     private val countryMutableLiveData = MutableLiveData<CountryDetailsViewState>()
-    open val countryLiveData: LiveData<CountryDetailsViewState> = countryMutableLiveData
+    val countryLiveData: LiveData<CountryDetailsViewState> = countryMutableLiveData
 
     private lateinit var disposable: Disposable
 
-    open fun countryClicked(id: String) {
+    fun countryClicked(id: String) {
         getCountryById(id)
     }
 

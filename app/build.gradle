@@ -3,6 +3,11 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-android-extensions'
     id 'kotlin-kapt'
+    id 'kotlin-allopen'
+}
+
+allOpen {
+    annotation "com.example.countryinfo.testing.OpenClass"
 }
 
 android {
