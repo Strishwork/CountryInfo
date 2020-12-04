@@ -24,9 +24,7 @@ class CountryDetailsAdapter(
         } else {
             holder.itemView.circleImage.setImageResource(R.drawable.circle2)
         }
-        if (position == states.size - 1) {
-            holder.itemView.lineImage.isVisible = false
-        }
+        holder.itemView.lineImage.isVisible = position != states.size - 1
         holder.bind(states[position])
     }
 
@@ -39,63 +37,71 @@ class CountryDetailsAdapter(
         notifyDataSetChanged()
     }
 
-    class ViewHolder(
-        view: View, private val listener: OnItemClickListener
-    ) : RecyclerView.ViewHolder(view), View.OnClickListener {
+    class ViewHolder(view: View, private val listener: OnItemClickListener) :
+        RecyclerView.ViewHolder(view) {
 
-        var viewSection: DetailsSections? = null
-        var dialogMessage = emptyList<String>()
-
-        init {
-            itemView.setOnClickListener(this)
-        }
-
-        override fun onClick(v: View?) {
-            viewSection?.let { listener.onItemClick(it, dialogMessage) }
-        }
+        private val titles = listOf(itemView.titleText, itemView.titleText2, itemView.titleText3)
 
         interface OnItemClickListener {
-            fun onItemClick(section: DetailsSections, dialogMessage: List<String>)
+            fun onItemClick(state: DetailsViewHolderState)
         }
 
         fun bind(state: DetailsViewHolderState) {
             itemView.labelText.text = state.title
+            itemView.truncateDots.isVisible = false
 
-            with(itemView) {
-                listOf(titleText, titleText2, titleText3).forEachIndexed { index, textView ->
-                    state.info.getOrNull(index)?.let {
-                        textView.apply {
-                            text = it
-                            setBackgroundResource(state.detailsSections.bgShapeId)
-                            isVisible = true
-                        }
-                        if (index == 0) {
-                            viewSection = null
+            titles.forEachIndexed { index, textView ->
+                state.info.getOrNull(index)?.let {
+                    textView.apply {
+                        text = it
+                        if (state.detailsSections.bgShapeId == 0) {
+                            setBackgroundResource(0)
+                            textView.setPadding(0, 0, 0, 0)
                         } else {
-                            viewSection = state.detailsSections
-                            dialogMessage = state.info
-                            itemView.post { checkViewsWidth() }
+                            setBackgroundResource(state.detailsSections.bgShapeId)
                         }
-                    } ?: run { textView.isVisible = false }
+                    }
                 }
             }
+            if (state.info.size > 1) {
+                itemView.setOnClickListener { listener.onItemClick(state) }
+                checkViewsWidth(itemView)
+            } else {
+                itemView.setOnClickListener(null)
+                for (i in 1 until titles.size) {
+                    titles[i].text = ""
+                }
+            }
+
         }
 
-        private fun checkViewsWidth() {
+        /**
+         * Checking if each titleTextView of this itemView, starting from the second one,
+         * fits within the screen boundaries, and if not, makes it invisible
+         */
+        private fun checkViewsWidth(itemView: View) {
             val boundsWidth =
-                itemView.titlesBounds.measuredWidth - itemView.context.resources.getDimension(R.dimen.titles_margin)
-                    .toInt()
-            val view1 = itemView.titleText.measuredWidth
-            val view2 = itemView.titleText2.measuredWidth
-            val view3 = itemView.titleText3.measuredWidth
-            if (view1 + view2 > boundsWidth) {
-                itemView.titleText2.isVisible = false
-                itemView.titleText3.isVisible = false
-                itemView.truncateDots.isVisible = true
-                return
-            } else if (view1 + view2 + view3 > boundsWidth) {
-                itemView.titleText3.isVisible = false
-                itemView.truncateDots.isVisible = true
+                itemView.titlesBounds.measuredWidth -
+                        (itemView.titlesBounds.layoutParams as ViewGroup.MarginLayoutParams).marginStart
+            itemView.titleText.measure(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+            var currentWidth = itemView.titleText.measuredWidth
+            for (i in 1 until titles.size) {
+                /*Starting from 1 because first titleText has to be
+                 measured earlier in order to return correct value*/
+                titles[i].measure(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+                currentWidth += titles[i].measuredWidth
+                if (currentWidth < boundsWidth) {
+                    titles[i].isVisible = titles[i].text != ""
+                } else {
+                    titles[i].isVisible = false
+                    itemView.truncateDots.isVisible = true
+                }
             }
         }
     }
