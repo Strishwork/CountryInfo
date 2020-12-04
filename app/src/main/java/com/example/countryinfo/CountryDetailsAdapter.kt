@@ -68,13 +68,17 @@ class CountryDetailsAdapter(
                 checkViewsWidth(itemView)
             } else {
                 itemView.setOnClickListener(null)
-                for (i in 1 until titles.size){
+                for (i in 1 until titles.size) {
                     titles[i].text = ""
                 }
             }
 
         }
 
+        /**
+         * Checking if each titleTextView of this itemView, starting from the second one,
+         * fits within the screen boundaries, and if not, makes it invisible
+         */
         private fun checkViewsWidth(itemView: View) {
             val boundsWidth =
                 itemView.titlesBounds.measuredWidth -
