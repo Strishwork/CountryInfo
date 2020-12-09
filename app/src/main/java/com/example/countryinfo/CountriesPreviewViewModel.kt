@@ -3,11 +3,10 @@ package com.example.countryinfo
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.apollographql.apollo.exception.ApolloException
+import androidx.lifecycle.viewModelScope
 import com.example.api.ICountriesApi
 import com.example.countryinfo.testing.OpenForTesting
-import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.launch
 
 @OpenForTesting
 class CountriesPreviewViewModel(
@@ -16,49 +15,41 @@ class CountriesPreviewViewModel(
 
     private val countriesMutableLiveData = MutableLiveData<CountriesPreviewViewState>()
     val countriesLiveData: LiveData<CountriesPreviewViewState> = countriesMutableLiveData
-    private lateinit var disposable: Disposable
 
     init {
         getCountries()
     }
 
     private fun getCountries() {
-        val countryObservable = countryApi.getCountries()
-            .flatMap { response ->
-                val countriesDto = response.data?.country
-                when {
-                    response.hasErrors() -> Observable.error(response.errors?.get(0)?.message?.let {
-                        ApolloException(it)
-                    })
-                    countriesDto == null -> Observable.error(ApolloException("Countries are not available :("))
-                    else -> {
-                        val countries = countriesDto.map { country ->
-                            CountryPreview(
-                                country?.fragments?.countryPreview?._id ?: "0",
-                                country?.fragments?.countryPreview?.name ?: "",
-                                country?.fragments?.countryPreview?.capital ?: "",
-                                country?.fragments?.countryPreview?.flag?.svgFile ?: "",
-                                country?.fragments?.countryPreview?.subregion?.region?.name ?: ""
-                            )
-                        }
-                        Observable.just(countries)
+        viewModelScope.launch {
+            val response = countryApi.getCountries()
+            val countriesDto = response.data?.country
+            when {
+                response.hasErrors() ->
+                    countriesMutableLiveData.postValue(CountriesPreviewViewState.Error(
+                        response.errors?.get(0)?.message.let { Throwable(it) }
+                    ))
+                countriesDto == null -> countriesMutableLiveData.postValue(
+                    CountriesPreviewViewState.Error(Throwable("Countries are not available :("))
+                )
+                else -> {
+                    val countries = countriesDto.map { country ->
+                        CountryPreview(
+                            country?.fragments?.countryPreview?._id ?: "0",
+                            country?.fragments?.countryPreview?.name ?: "",
+                            country?.fragments?.countryPreview?.capital ?: "",
+                            country?.fragments?.countryPreview?.flag?.svgFile ?: "",
+                            country?.fragments?.countryPreview?.subregion?.region?.name ?: ""
+                        )
                     }
+                    countriesMutableLiveData.postValue(
+                        CountriesPreviewViewState.Default(
+                            countries
+                        )
+                    )
                 }
             }
 
-        disposable = countryObservable.subscribe(
-            { countries ->
-                countriesMutableLiveData.postValue(
-                    CountriesPreviewViewState.Default(
-                        countries
-                    )
-                )
-            },
-            { error -> countriesMutableLiveData.postValue(CountriesPreviewViewState.Error(error)) })
-    }
-
-    override fun onCleared() {
-        disposable.dispose()
-        super.onCleared()
+        }
     }
 }

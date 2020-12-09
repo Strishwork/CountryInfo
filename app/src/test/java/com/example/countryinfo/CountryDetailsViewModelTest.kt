@@ -2,14 +2,18 @@ package com.example.countryinfo
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import com.apollographql.apollo.api.Error
 import com.apollographql.apollo.api.Response
-import com.apollographql.apollo.exception.ApolloException
 import com.example.GetCountryByIdQuery
 import com.example.api.ICountriesApi
 import com.example.fragment.CountryDetails
-import io.reactivex.Observable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.setMain
 import org.hamcrest.core.Is.`is`
 import org.junit.Assert.assertThat
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Answers
@@ -17,6 +21,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.Mockito.*
 import java.util.*
 
+@ExperimentalCoroutinesApi
 class CountryDetailsViewModelTest {
 
     @Rule
@@ -31,97 +36,99 @@ class CountryDetailsViewModelTest {
 
     private val testCountryId = UUID.randomUUID().toString()
 
-    @Test
-    fun `when countryClicked invoked then post default CountryDetailsViewState on success`() {
-        val mockResponse: Response<GetCountryByIdQuery.Data> =
-            mock(Response::class.java) as Response<GetCountryByIdQuery.Data>
-        val mockData = mock(GetCountryByIdQuery.Data::class.java, Answers.RETURNS_DEEP_STUBS)
-        val mockCountryDetailsFragment = mockCountryDetailsFragment()
+    @Before
+    fun setUp() {
+        Dispatchers.setMain(Dispatchers.Unconfined)
+    }
 
-        `when`(mockResponse.data).thenReturn(mockData)
-        `when`(mockData.country!![0]!!.fragments.countryDetails).thenReturn(
-            mockCountryDetailsFragment
-        )
-        `when`(countriesApiMock.getCountryById(testCountryId)).thenReturn(
-            Observable.just(
-                mockResponse
+    @Test
+    fun `when countryClicked invoked then post default CountryDetailsViewState on success`() =
+        runBlockingTest {
+            val mockResponse: Response<GetCountryByIdQuery.Data> =
+                mock(Response::class.java) as Response<GetCountryByIdQuery.Data>
+            val mockData = mock(GetCountryByIdQuery.Data::class.java, Answers.RETURNS_DEEP_STUBS)
+            val mockCountryDetailsFragment = mockCountryDetailsFragment()
+
+            `when`(mockResponse.data).thenReturn(mockData)
+            `when`(mockData.country!![0]!!.fragments.countryDetails).thenReturn(
+                mockCountryDetailsFragment
             )
-        )
+            `when`(countriesApiMock.getCountryById(testCountryId)).thenReturn(mockResponse)
 
-        val mockObserver = mock(Observer::class.java) as Observer<CountryDetailsViewState>
-        viewModel.countryLiveData.observeForever(mockObserver)
+            val mockObserver = mock(Observer::class.java) as Observer<CountryDetailsViewState>
+            viewModel.countryLiveData.observeForever(mockObserver)
 
-        viewModel.countryClicked(testCountryId)
+            viewModel.countryClicked(testCountryId)
 
-        val argumentCaptor = ArgumentCaptor.forClass(CountryDetailsViewState::class.java)
-        verify(mockObserver, times(1)).onChanged(argumentCaptor.capture())
+            val argumentCaptor = ArgumentCaptor.forClass(CountryDetailsViewState::class.java)
+            verify(mockObserver, times(1)).onChanged(argumentCaptor.capture())
 
-        assert(argumentCaptor.allValues.last() is CountryDetailsViewState.Default)
+            assert(argumentCaptor.allValues.last() is CountryDetailsViewState.Default)
 
-        val actualState = argumentCaptor.allValues.last() as CountryDetailsViewState.Default
+            val actualState = argumentCaptor.allValues.last() as CountryDetailsViewState.Default
 
-        assertThat(actualState.countryDetails.name, `is`("Test name"))
-        assertThat(actualState.countryDetails.capital, `is`("Test capital"))
-        assertThat(actualState.countryDetails.region, `is`("Test subregion name"))
-        assertThat(actualState.countryDetails.population, `is`(1_000_000.0))
-        assertThat(actualState.countryDetails.flag, `is`("https://test.com"))
-        assertThat(actualState.countryDetails.currencyNames[0], `is`("Test currency"))
-        assertThat(actualState.countryDetails.languages[0], `is`("Test language"))
-        assertThat(actualState.countryDetails.timezones[0], `is`("UTC+03:00"))
-        assertThat(actualState.countryDetails.callingCodes[0], `is`("+380"))
-    }
-
-    @Test
-    fun `when countryClicked invoked and countryDetails is null then post error CountryDetailsViewState on success`() {
-        val mockResponse: Response<GetCountryByIdQuery.Data> =
-            mock(Response::class.java) as Response<GetCountryByIdQuery.Data>
-        val mockData = mock(GetCountryByIdQuery.Data::class.java, Answers.RETURNS_DEEP_STUBS)
-
-        `when`(mockResponse.data).thenReturn(mockData)
-        `when`(mockData.country!![0]!!.fragments.countryDetails).thenReturn(null)
-        `when`(countriesApiMock.getCountryById(testCountryId)).thenReturn(
-            Observable.just(
-                mockResponse
-            )
-        )
-
-        val mockObserver = mock(Observer::class.java) as Observer<CountryDetailsViewState>
-        viewModel.countryLiveData.observeForever(mockObserver)
-
-        viewModel.countryClicked(testCountryId)
-
-        val argumentCaptor = ArgumentCaptor.forClass(CountryDetailsViewState::class.java)
-        verify(mockObserver, times(1)).onChanged(argumentCaptor.capture())
-
-        assert(argumentCaptor.allValues.last() is CountryDetailsViewState.Error)
-
-        val actualState = argumentCaptor.allValues.last() as CountryDetailsViewState.Error
-
-        assertThat(actualState.error.message, `is`("Country is not available :("))
-
-    }
+            assertThat(actualState.countryDetails.name, `is`("Test name"))
+            assertThat(actualState.countryDetails.capital, `is`("Test capital"))
+            assertThat(actualState.countryDetails.region, `is`("Test subregion name"))
+            assertThat(actualState.countryDetails.population, `is`(1_000_000.0))
+            assertThat(actualState.countryDetails.flag, `is`("https://test.com"))
+            assertThat(actualState.countryDetails.currencyNames[0], `is`("Test currency"))
+            assertThat(actualState.countryDetails.languages[0], `is`("Test language"))
+            assertThat(actualState.countryDetails.timezones[0], `is`("UTC+03:00"))
+            assertThat(actualState.countryDetails.callingCodes[0], `is`("+380"))
+        }
 
     @Test
-    fun `when countryClicked invoked and response has errors then post error CountryDetailsViewState on success`() {
-        `when`(countriesApiMock.getCountryById(testCountryId)).thenReturn(
-            Observable.error(ApolloException("Test error"))
-        )
+    fun `when countryClicked invoked and countryDetails is null then post error CountryDetailsViewState on success`() =
+        runBlockingTest {
+            val mockResponse: Response<GetCountryByIdQuery.Data> =
+                mock(Response::class.java) as Response<GetCountryByIdQuery.Data>
+            val mockData = mock(GetCountryByIdQuery.Data::class.java, Answers.RETURNS_DEEP_STUBS)
 
-        val mockObserver = mock(Observer::class.java) as Observer<CountryDetailsViewState>
-        viewModel.countryLiveData.observeForever(mockObserver)
+            `when`(mockResponse.data).thenReturn(mockData)
+            `when`(mockData.country!![0]!!.fragments.countryDetails).thenReturn(null)
+            `when`(countriesApiMock.getCountryById(testCountryId)).thenReturn(mockResponse)
 
-        viewModel.countryClicked(testCountryId)
+            val mockObserver = mock(Observer::class.java) as Observer<CountryDetailsViewState>
+            viewModel.countryLiveData.observeForever(mockObserver)
 
-        val argumentCaptor = ArgumentCaptor.forClass(CountryDetailsViewState::class.java)
-        verify(mockObserver, times(1)).onChanged(argumentCaptor.capture())
+            viewModel.countryClicked(testCountryId)
 
-        assert(argumentCaptor.allValues.last() is CountryDetailsViewState.Error)
+            val argumentCaptor = ArgumentCaptor.forClass(CountryDetailsViewState::class.java)
+            verify(mockObserver, times(1)).onChanged(argumentCaptor.capture())
 
-        val actualState = argumentCaptor.allValues.last() as CountryDetailsViewState.Error
+            assert(argumentCaptor.allValues.last() is CountryDetailsViewState.Error)
 
-        assertThat(actualState.error.message, `is`("Test error"))
+            val actualState = argumentCaptor.allValues.last() as CountryDetailsViewState.Error
 
-    }
+            assertThat(actualState.error.message, `is`("Country is not available :("))
+
+        }
+
+    @Test
+    fun `when countryClicked invoked and response has errors then post error CountryDetailsViewState on success`() =
+        runBlockingTest {
+            val mockResponse: Response<GetCountryByIdQuery.Data> =
+                mock(Response::class.java) as Response<GetCountryByIdQuery.Data>
+            `when`(countriesApiMock.getCountryById(testCountryId)).thenReturn(mockResponse)
+            `when`(mockResponse.hasErrors()).thenReturn(true)
+            `when`(mockResponse.errors).thenReturn(listOf(Error("Test error")))
+
+            val mockObserver = mock(Observer::class.java) as Observer<CountryDetailsViewState>
+            viewModel.countryLiveData.observeForever(mockObserver)
+
+            viewModel.countryClicked(testCountryId)
+
+            val argumentCaptor = ArgumentCaptor.forClass(CountryDetailsViewState::class.java)
+            verify(mockObserver, times(1)).onChanged(argumentCaptor.capture())
+
+            assert(argumentCaptor.allValues.last() is CountryDetailsViewState.Error)
+
+            val actualState = argumentCaptor.allValues.last() as CountryDetailsViewState.Error
+
+            assertThat(actualState.error.message, `is`("Test error"))
+
+        }
 
     private fun mockCountryDetailsFragment(): CountryDetails {
         val mockCountryDetailsFragment =
