@@ -2,21 +2,25 @@ package com.example.countryinfo
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import com.apollographql.apollo.api.Error
 import com.apollographql.apollo.api.Response
-import com.apollographql.apollo.exception.ApolloException
 import com.example.GetCountriesQuery
 import com.example.api.ICountriesApi
-import io.reactivex.Observable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.setMain
 import org.hamcrest.core.Is.`is`
-import org.junit.Assert
-import org.junit.Rule
-import org.junit.Test
+import org.junit.*
 import org.mockito.Answers
 import org.mockito.ArgumentCaptor
 import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 
+@ExperimentalCoroutinesApi
 class CountriesPreviewViewModelTest {
 
     @Rule
@@ -29,90 +33,101 @@ class CountriesPreviewViewModelTest {
         CountriesPreviewViewModel(countriesApiMock)
     }
 
-    @Test
-    fun `when getCountries invoked then post default CountryDetailsViewState on success`() {
-        val mockResponse: Response<GetCountriesQuery.Data> =
-            mock(Response::class.java) as Response<GetCountriesQuery.Data>
-        val mockData =
-            mock(GetCountriesQuery.Data::class.java, Answers.RETURNS_DEEP_STUBS)
-        val mockCountryPreviewFragments = mockCountriesQueryList()
+    private val testDispatcher = TestCoroutineDispatcher()
 
-        `when`(mockResponse.data).thenReturn(mockData)
-        `when`(mockData.country).thenReturn(
-            mockCountryPreviewFragments
-        )
-        `when`(countriesApiMock.getCountries()).thenReturn(
-            Observable.just(
+    @Before
+    fun setUp() {
+        Dispatchers.setMain(testDispatcher)
+    }
+
+    @After
+    fun tearDown() {
+        Dispatchers.resetMain()
+        testDispatcher.cleanupTestCoroutines()
+    }
+
+    @Test
+    fun `when getCountries invoked then post default CountryDetailsViewState on success`() =
+        runBlockingTest {
+            val mockResponse: Response<GetCountriesQuery.Data> =
+                mock(Response::class.java) as Response<GetCountriesQuery.Data>
+            val mockData =
+                mock(GetCountriesQuery.Data::class.java, Answers.RETURNS_DEEP_STUBS)
+            val mockCountryPreviewFragments = mockCountriesQueryList()
+
+            `when`(mockResponse.data).thenReturn(mockData)
+            `when`(mockData.country).thenReturn(
+                mockCountryPreviewFragments
+            )
+
+            `when`(countriesApiMock.getCountries()).thenReturn(
                 mockResponse
             )
-        )
 
-        val mockObserver = mock(Observer::class.java) as Observer<CountriesPreviewViewState>
-        viewModel.countriesLiveData.observeForever(mockObserver)
+            val mockObserver = mock(Observer::class.java) as Observer<CountriesPreviewViewState>
+            viewModel.countriesLiveData.observeForever(mockObserver)
 
-        val argumentCaptor = ArgumentCaptor.forClass(CountriesPreviewViewState::class.java)
-        Mockito.verify(mockObserver, Mockito.times(1)).onChanged(argumentCaptor.capture())
+            val argumentCaptor = ArgumentCaptor.forClass(CountriesPreviewViewState::class.java)
+            Mockito.verify(mockObserver, Mockito.times(1)).onChanged(argumentCaptor.capture())
 
-        assert(argumentCaptor.allValues.last() is CountriesPreviewViewState.Default)
+            assert(argumentCaptor.allValues.last() is CountriesPreviewViewState.Default)
 
-        val actualState = argumentCaptor.allValues.last() as CountriesPreviewViewState.Default
+            val actualState = argumentCaptor.allValues.last() as CountriesPreviewViewState.Default
 
-        Assert.assertThat(actualState.countries[0].countryName, `is`("Test name"))
-        Assert.assertThat(actualState.countries[0].capital, `is`("Test capital"))
-        Assert.assertThat(actualState.countries[0].region, `is`("Test subregion name"))
-        Assert.assertThat(actualState.countries[0].flagUrl, `is`("https://test.com"))
-    }
-
-    @Test
-    fun `when countryClicked invoked and CountryPreview is null then post error CountryDetailsViewState on success`() {
-        val mockResponse: Response<GetCountriesQuery.Data> =
-            mock(Response::class.java) as Response<GetCountriesQuery.Data>
-        val mockData =
-            mock(GetCountriesQuery.Data::class.java, Answers.RETURNS_DEEP_STUBS)
-
-        `when`(mockResponse.data).thenReturn(mockData)
-        `when`(mockData.country).thenReturn(
-            null
-        )
-        `when`(countriesApiMock.getCountries()).thenReturn(
-            Observable.just(
-                mockResponse
-            )
-        )
-
-        val mockObserver = mock(Observer::class.java) as Observer<CountriesPreviewViewState>
-        viewModel.countriesLiveData.observeForever(mockObserver)
-
-        val argumentCaptor = ArgumentCaptor.forClass(CountriesPreviewViewState::class.java)
-        Mockito.verify(mockObserver, Mockito.times(1)).onChanged(argumentCaptor.capture())
-
-        assert(argumentCaptor.allValues.last() is CountriesPreviewViewState.Error)
-
-        val actualState = argumentCaptor.allValues.last() as CountriesPreviewViewState.Error
-
-        Assert.assertThat(actualState.error.message, `is`("Countries are not available :("))
-    }
+            Assert.assertThat(actualState.countries[0].countryName, `is`("Test name"))
+            Assert.assertThat(actualState.countries[0].capital, `is`("Test capital"))
+            Assert.assertThat(actualState.countries[0].region, `is`("Test subregion name"))
+            Assert.assertThat(actualState.countries[0].flagUrl, `is`("https://test.com"))
+        }
 
     @Test
-    fun `when countryClicked invoked and response has errors then post error CountryDetailsViewState on success`() {
-        `when`(countriesApiMock.getCountries()).thenReturn(
-            Observable.error(
-                ApolloException("Test error")
+    fun `when countryClicked invoked and CountryPreview is null then post error CountryDetailsViewState on success`() =
+        runBlockingTest {
+            val mockResponse: Response<GetCountriesQuery.Data> =
+                mock(Response::class.java) as Response<GetCountriesQuery.Data>
+            val mockData =
+                mock(GetCountriesQuery.Data::class.java, Answers.RETURNS_DEEP_STUBS)
+
+            `when`(mockResponse.data).thenReturn(mockData)
+            `when`(mockData.country).thenReturn(
+                null
             )
-        )
+            `when`(countriesApiMock.getCountries()).thenReturn(mockResponse)
 
-        val mockObserver = mock(Observer::class.java) as Observer<CountriesPreviewViewState>
-        viewModel.countriesLiveData.observeForever(mockObserver)
+            val mockObserver = mock(Observer::class.java) as Observer<CountriesPreviewViewState>
+            viewModel.countriesLiveData.observeForever(mockObserver)
 
-        val argumentCaptor = ArgumentCaptor.forClass(CountriesPreviewViewState::class.java)
-        Mockito.verify(mockObserver, Mockito.times(1)).onChanged(argumentCaptor.capture())
+            val argumentCaptor = ArgumentCaptor.forClass(CountriesPreviewViewState::class.java)
+            Mockito.verify(mockObserver, Mockito.times(1)).onChanged(argumentCaptor.capture())
 
-        assert(argumentCaptor.allValues.last() is CountriesPreviewViewState.Error)
+            assert(argumentCaptor.allValues.last() is CountriesPreviewViewState.Error)
 
-        val actualState = argumentCaptor.allValues.last() as CountriesPreviewViewState.Error
+            val actualState = argumentCaptor.allValues.last() as CountriesPreviewViewState.Error
 
-        Assert.assertThat(actualState.error.message, `is`("Test error"))
-    }
+            Assert.assertThat(actualState.error.message, `is`("Countries are not available :("))
+        }
+
+    @Test
+    fun `when countryClicked invoked and response has errors then post error CountryDetailsViewState on success`() =
+        runBlockingTest {
+            val mockResponse: Response<GetCountriesQuery.Data> =
+                mock(Response::class.java) as Response<GetCountriesQuery.Data>
+            `when`(countriesApiMock.getCountries()).thenReturn(mockResponse)
+            `when`(mockResponse.hasErrors()).thenReturn(true)
+            `when`(mockResponse.errors).thenReturn(listOf(Error("Test error")))
+
+            val mockObserver = mock(Observer::class.java) as Observer<CountriesPreviewViewState>
+            viewModel.countriesLiveData.observeForever(mockObserver)
+
+            val argumentCaptor = ArgumentCaptor.forClass(CountriesPreviewViewState::class.java)
+            Mockito.verify(mockObserver, Mockito.times(1)).onChanged(argumentCaptor.capture())
+
+            assert(argumentCaptor.allValues.last() is CountriesPreviewViewState.Error)
+
+            val actualState = argumentCaptor.allValues.last() as CountriesPreviewViewState.Error
+
+            Assert.assertThat(actualState.error.message, `is`("Test error"))
+        }
 
     private fun mockCountriesQueryList(): List<GetCountriesQuery.Country> {
         val mockCountryPreview =
