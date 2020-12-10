@@ -6,7 +6,6 @@ import com.example.GetCountryByIdQuery
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.mockito.Answers
 import org.mockito.ArgumentCaptor
@@ -31,14 +30,12 @@ class CountriesApiTest {
 
     @Test
     fun test_apolloClientGetCountryById() {
-        runBlocking {
-            GlobalScope.launch {
-                countriesApi.getCountryById("3")
+        GlobalScope.launch {
+            countriesApi.getCountryById("3")
 
-                val captor = ArgumentCaptor.forClass(GetCountryByIdQuery::class.java)
-                verify(apolloClientMock).query(captor.capture())
-                assert(captor.allValues.last().id.value == "3")
-            }
+            val captor = ArgumentCaptor.forClass(GetCountryByIdQuery::class.java)
+            verify(apolloClientMock).query(captor.capture())
+            assert(captor.allValues.last().id.value == "3")
         }
     }
 
