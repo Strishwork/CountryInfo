@@ -8,13 +8,12 @@ import com.example.GetCountriesQuery
 import com.example.api.ICountriesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.setMain
 import org.hamcrest.core.Is.`is`
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.*
 import org.mockito.Answers
 import org.mockito.ArgumentCaptor
 import org.mockito.Mockito
@@ -34,9 +33,17 @@ class CountriesPreviewViewModelTest {
         CountriesPreviewViewModel(countriesApiMock)
     }
 
+    private val testDispatcher = TestCoroutineDispatcher()
+
     @Before
     fun setUp() {
-        Dispatchers.setMain(Dispatchers.Unconfined)
+        Dispatchers.setMain(testDispatcher)
+    }
+
+    @After
+    fun tearDown() {
+        Dispatchers.resetMain()
+        testDispatcher.cleanupTestCoroutines()
     }
 
     @Test

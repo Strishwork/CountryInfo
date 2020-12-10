@@ -10,7 +10,9 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.mockito.Answers
 import org.mockito.ArgumentCaptor
-import org.mockito.Mockito.*
+import org.mockito.ArgumentMatchers.isA
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.verify
 
 @ExperimentalCoroutinesApi
 class CountriesApiTest {
@@ -19,22 +21,18 @@ class CountriesApiTest {
 
     private val countriesApi: CountriesApi = CountriesApi(apolloClientMock)
 
-    private val myScope = GlobalScope
-
     @Test
     fun test_apolloClientGetCountries() {
-        runBlocking {
-            myScope.launch {
-                countriesApi.getCountries()
-                verify(apolloClientMock).query(isA(GetCountriesQuery::class.java))
-            }
+        GlobalScope.launch {
+            countriesApi.getCountries()
+            verify(apolloClientMock).query(isA(GetCountriesQuery::class.java))
         }
     }
 
     @Test
     fun test_apolloClientGetCountryById() {
         runBlocking {
-            myScope.launch {
+            GlobalScope.launch {
                 countriesApi.getCountryById("3")
 
                 val captor = ArgumentCaptor.forClass(GetCountryByIdQuery::class.java)
