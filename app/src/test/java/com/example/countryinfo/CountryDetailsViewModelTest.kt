@@ -81,11 +81,11 @@ class CountryDetailsViewModelTest {
             assertThat(actualState.countryDetails.name, `is`("Test name"))
             assertThat(actualState.countryDetails.capital, `is`("Test capital"))
             assertThat(actualState.countryDetails.region, `is`("Test subregion name"))
-            assertThat(actualState.countryDetails.population, `is`(1_000_000.0))
+            assertThat(actualState.countryDetails.population, `is`("1 m"))
             assertThat(actualState.countryDetails.flag, `is`("https://test.com"))
             assertThat(actualState.countryDetails.currencyNames[0], `is`("Test currency"))
             assertThat(actualState.countryDetails.languages[0], `is`("Test language"))
-            assertThat(actualState.countryDetails.timezones[0], `is`("UTC+03:00"))
+            assertThat(actualState.countryDetails.timezones[0], `is`("GMT + 3:00"))
             assertThat(actualState.countryDetails.callingCodes[0], `is`("+380"))
         }
 

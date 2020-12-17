@@ -63,7 +63,7 @@ class CountryDetailsViewModel(private val countryApi: ICountriesApi) : ViewModel
             ),
             DetailsViewHolderState(
                 DetailsSections.POPULATION.title,
-                listOf(formatPopulation(countryDetails.population)),
+                listOf(countryDetails.population),
                 false,
                 DetailsSections.DEFAULT
             ),
@@ -81,7 +81,7 @@ class CountryDetailsViewModel(private val countryApi: ICountriesApi) : ViewModel
             ),
             DetailsViewHolderState(
                 DetailsSections.TIMEZONES.title,
-                formatTime(countryDetails.timezones),
+                countryDetails.timezones,
                 true,
                 DetailsSections.TIMEZONES
             ),
@@ -129,11 +129,11 @@ class CountryDetailsViewModel(private val countryApi: ICountriesApi) : ViewModel
                 name,
                 capital,
                 subregion?.region?.name ?: "",
-                population,
+                formatPopulation(population),
                 flag?.svgFile ?: "",
                 currencies?.mapNotNull { currencyName -> currencyName?.name ?: "" } as List<String>,
                 officialLanguages?.mapNotNull { language -> language?.name ?: "" } as List<String>,
-                timezones?.mapNotNull { timezone -> timezone?.name ?: "" } as List<String>,
+                formatTime(timezones?.mapNotNull { timezone -> timezone?.name ?: "" } as List<String>),
                 callingCodes?.mapNotNull { callingCode ->
                     "+" + callingCode?.name ?: ""
                 } as List<String>

@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/flagCardView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            app:cardCornerRadius="@dimen/country_flag_corner_radius"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tabletGarlandImageView"
+            app:layout_constraintTop_toTopOf="@+id/tabletGarlandImageView">
+
+            <ImageView
+                android:id="@+id/country_flag"
+                android:layout_width="@dimen/tablet_details_flag_width"
+                android:layout_height="@dimen/tablet_details_flag_height"
+                android:scaleType="centerCrop" />
+        </androidx.cardview.widget.CardView>
+
+        <ImageView
+            android:id="@+id/tabletGarlandImageView"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/tablet_details_garland_height"
+            android:src="@drawable/garland"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/tabletSmileImageView"
+                android:layout_width="@dimen/tablet_details_smile_width"
+                android:layout_height="@dimen/tablet_details_smile_height"
+                android:src="@drawable/smile"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/tabletCircleImageViewN"
+                android:layout_width="@dimen/details_circle_size"
+                android:layout_height="@dimen/details_circle_size"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/circle1"
+                app:layout_constraintBottom_toTopOf="@+id/tabletSmileImageView"
+                app:layout_constraintEnd_toEndOf="@+id/tabletSmileImageView"
+                app:layout_constraintStart_toStartOf="@+id/tabletSmileImageView" />
+
+            <ImageView
+                android:id="@+id/tabletCircleImageViewS"
+                android:layout_width="@dimen/details_circle_size"
+                android:layout_height="@dimen/details_circle_size"
+                android:layout_marginTop="@dimen/tablet_details_circle_vertical_margin"
+                android:src="@drawable/circle1"
+                app:layout_constraintEnd_toEndOf="@+id/tabletSmileImageView"
+                app:layout_constraintStart_toStartOf="@+id/tabletSmileImageView"
+                app:layout_constraintTop_toBottomOf="@+id/tabletSmileImageView" />
+
+            <ImageView
+                android:id="@+id/tabletCircleImageViewW"
+                android:layout_width="@dimen/details_circle_size"
+                android:layout_height="@dimen/details_circle_size"
+                android:layout_marginEnd="@dimen/tablet_details_circle_horizontal_margin"
+                android:src="@drawable/circle1"
+                app:layout_constraintBottom_toBottomOf="@+id/tabletSmileImageView"
+                app:layout_constraintEnd_toStartOf="@+id/tabletSmileImageView"
+                app:layout_constraintTop_toTopOf="@+id/tabletSmileImageView" />
+
+            <ImageView
+                android:id="@+id/tabletCircleImageViewE"
+                android:layout_width="@dimen/details_circle_size"
+                android:layout_height="@dimen/details_circle_size"
+                android:layout_marginStart="@dimen/tablet_details_circle_horizontal_margin"
+                android:src="@drawable/circle1"
+                app:layout_constraintBottom_toBottomOf="@+id/tabletSmileImageView"
+                app:layout_constraintStart_toEndOf="@+id/tabletSmileImageView"
+                app:layout_constraintTop_toTopOf="@+id/tabletSmileImageView" />
+
+            <ImageView
+                android:id="@+id/tabletCircleImageViewNE"
+                android:layout_width="@dimen/details_circle_size"
+                android:layout_height="@dimen/details_circle_size"
+                android:src="@drawable/circle2"
+                app:layout_constraintBottom_toTopOf="@+id/tabletSmileImageView"
+                app:layout_constraintEnd_toEndOf="@+id/tabletSmileImageView"
+                app:layout_constraintStart_toEndOf="@+id/tabletSmileImageView"
+                app:layout_constraintTop_toTopOf="@+id/tabletSmileImageView" />
+
+            <ImageView
+                android:id="@+id/tabletCircleImageViewNW"
+                android:layout_width="@dimen/details_circle_size"
+                android:layout_height="@dimen/details_circle_size"
+                android:src="@drawable/circle2"
+                app:layout_constraintBottom_toTopOf="@+id/tabletSmileImageView"
+                app:layout_constraintEnd_toStartOf="@+id/tabletSmileImageView"
+                app:layout_constraintStart_toStartOf="@+id/tabletSmileImageView"
+                app:layout_constraintTop_toTopOf="@+id/tabletSmileImageView" />
+
+            <ImageView
+                android:id="@+id/tabletCircleImageViewSW"
+                android:layout_width="@dimen/details_circle_size"
+                android:layout_height="@dimen/details_circle_size"
+                android:src="@drawable/circle2"
+                app:layout_constraintBottom_toBottomOf="@+id/tabletSmileImageView"
+                app:layout_constraintEnd_toStartOf="@+id/tabletSmileImageView"
+                app:layout_constraintStart_toStartOf="@+id/tabletSmileImageView"
+                app:layout_constraintTop_toBottomOf="@+id/tabletSmileImageView" />
+
+            <ImageView
+                android:id="@+id/tabletCircleImageViewSE"
+                android:layout_width="@dimen/details_circle_size"
+                android:layout_height="@dimen/details_circle_size"
+                android:src="@drawable/circle2"
+                app:layout_constraintBottom_toBottomOf="@+id/tabletSmileImageView"
+                app:layout_constraintEnd_toEndOf="@+id/tabletSmileImageView"
+                app:layout_constraintStart_toEndOf="@+id/tabletSmileImageView"
+                app:layout_constraintTop_toBottomOf="@+id/tabletSmileImageView" />
+
+            <ImageView
+                android:id="@+id/tabletLineImageViewSSE"
+                android:layout_width="@dimen/details_circle_size"
+                android:layout_height="@dimen/details_circle_size"
+                android:rotation="-50"
+                android:src="@drawable/long_line"
+                app:layout_constraintBottom_toBottomOf="@+id/tabletCircleImageViewS"
+                app:layout_constraintEnd_toStartOf="@+id/tabletCircleImageViewSE"
+                app:layout_constraintStart_toEndOf="@+id/tabletCircleImageViewS"
+                app:layout_constraintTop_toTopOf="@+id/tabletCircleImageViewSE" />
+
+
+            <ImageView
+                android:id="@+id/tabletLineImageViewESE"
+                android:layout_width="@dimen/details_circle_size"
+                android:layout_height="@dimen/details_circle_size"
+                android:rotation="-70"
+                android:src="@drawable/long_line"
+                app:layout_constraintBottom_toTopOf="@+id/tabletCircleImageViewSE"
+                app:layout_constraintEnd_toEndOf="@+id/tabletCircleImageViewE"
+                app:layout_constraintStart_toStartOf="@+id/tabletCircleImageViewSE"
+                app:layout_constraintTop_toBottomOf="@+id/tabletCircleImageViewE" />
+
+            <ImageView
+                android:id="@+id/tabletLineImageViewENE"
+                android:layout_width="@dimen/details_circle_size"
+                android:layout_height="@dimen/details_circle_size"
+                android:rotation="30"
+                android:src="@drawable/long_line"
+                app:layout_constraintBottom_toTopOf="@+id/tabletCircleImageViewE"
+                app:layout_constraintEnd_toEndOf="@+id/tabletCircleImageViewE"
+                app:layout_constraintStart_toStartOf="@+id/tabletCircleImageViewNE"
+                app:layout_constraintTop_toBottomOf="@+id/tabletCircleImageViewNE" />
+
+            <ImageView
+                android:id="@+id/tabletLineImageViewNNE"
+                android:layout_width="@dimen/details_circle_size"
+                android:layout_height="@dimen/details_circle_size"
+                android:rotation="10"
+                android:src="@drawable/long_line"
+                app:layout_constraintBottom_toBottomOf="@+id/tabletCircleImageViewNE"
+                app:layout_constraintEnd_toStartOf="@+id/tabletCircleImageViewNE"
+                app:layout_constraintStart_toEndOf="@+id/tabletCircleImageViewN"
+                app:layout_constraintTop_toTopOf="@+id/tabletCircleImageViewN" />
+
+            <ImageView
+                android:id="@+id/tabletLineImageViewNNW"
+                android:layout_width="@dimen/details_circle_size"
+                android:layout_height="@dimen/details_circle_size"
+                android:rotation="-50"
+                android:src="@drawable/long_line"
+                app:layout_constraintBottom_toBottomOf="@+id/tabletCircleImageViewNW"
+                app:layout_constraintEnd_toStartOf="@+id/tabletCircleImageViewN"
+                app:layout_constraintStart_toEndOf="@+id/tabletCircleImageViewNW"
+                app:layout_constraintTop_toTopOf="@+id/tabletCircleImageViewN" />
+
+            <ImageView
+                android:id="@+id/tabletLineImageViewWSW"
+                android:layout_width="@dimen/details_circle_size"
+                android:layout_height="@dimen/details_circle_size"
+                android:rotation="30"
+                android:src="@drawable/long_line"
+                app:layout_constraintBottom_toTopOf="@+id/tabletCircleImageViewSW"
+                app:layout_constraintEnd_toEndOf="@+id/tabletCircleImageViewSW"
+                app:layout_constraintStart_toStartOf="@+id/tabletCircleImageViewW"
+                app:layout_constraintTop_toBottomOf="@+id/tabletCircleImageViewW" />
+
+            <ImageView
+                android:id="@+id/tabletLineImageViewWNW"
+                android:layout_width="@dimen/details_circle_size"
+                android:layout_height="@dimen/details_circle_size"
+                android:rotation="-70"
+                android:src="@drawable/long_line"
+                app:layout_constraintBottom_toTopOf="@+id/tabletCircleImageViewW"
+                app:layout_constraintEnd_toEndOf="@+id/tabletCircleImageViewNW"
+                app:layout_constraintStart_toStartOf="@+id/tabletCircleImageViewW"
+                app:layout_constraintTop_toBottomOf="@+id/tabletCircleImageViewNW" />
+
+            <ImageView
+                android:id="@+id/tabletLineImageViewSSW"
+                android:layout_width="@dimen/details_circle_size"
+                android:layout_height="@dimen/details_circle_size"
+                android:rotation="10"
+                android:src="@drawable/long_line"
+                app:layout_constraintBottom_toBottomOf="@+id/tabletCircleImageViewS"
+                app:layout_constraintEnd_toStartOf="@+id/tabletCircleImageViewS"
+                app:layout_constraintStart_toEndOf="@+id/tabletCircleImageViewSW"
+                app:layout_constraintTop_toTopOf="@+id/tabletCircleImageViewSW" />
+
+            <TextView
+                android:id="@+id/tabletCountryNameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primary_text_color"
+                android:textSize="@dimen/details_title_text_size"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/tabletCircleImageViewN"
+                app:layout_constraintEnd_toEndOf="@+id/tabletCircleImageViewN"
+                app:layout_constraintStart_toStartOf="@+id/tabletCircleImageViewN" />
+
+            <TextView
+                android:id="@+id/tabletLabelCountryNameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/country_label"
+                android:textSize="@dimen/labels_small_text_size"
+                app:layout_constraintBottom_toTopOf="@+id/tabletCountryNameTextView"
+                app:layout_constraintEnd_toEndOf="@+id/tabletCircleImageViewN"
+                app:layout_constraintStart_toStartOf="@+id/tabletCircleImageViewN" />
+
+            <TextView
+                android:id="@+id/tabletCountryLanguageTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primary_text_color"
+                android:textSize="@dimen/details_title_text_size"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/tabletCircleImageViewS"
+                app:layout_constraintStart_toStartOf="@+id/tabletCircleImageViewS"
+                app:layout_constraintTop_toBottomOf="@+id/tabletLabelCountryLanguageTextView" />
+
+            <TextView
+                android:id="@+id/tabletLabelCountryLanguageTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/languages_label"
+                android:textSize="@dimen/labels_small_text_size"
+                app:layout_constraintEnd_toEndOf="@+id/tabletCircleImageViewS"
+                app:layout_constraintStart_toStartOf="@+id/tabletCircleImageViewS"
+                app:layout_constraintTop_toBottomOf="@+id/tabletCircleImageViewS" />
+
+            <TextView
+                android:id="@+id/tabletCountryPopulationTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/tablet_details_text_margin"
+                android:textColor="@color/primary_text_color"
+                android:textSize="@dimen/details_title_text_size"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/tabletCircleImageViewW"
+                app:layout_constraintEnd_toStartOf="@+id/tabletCircleImageViewW"
+                app:layout_constraintTop_toTopOf="@+id/tabletCircleImageViewW" />
+
+            <TextView
+                android:id="@+id/tabletLabelCountryPopulationTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/population_label"
+                android:textSize="@dimen/labels_small_text_size"
+                app:layout_constraintBottom_toTopOf="@+id/tabletCountryPopulationTextView"
+                app:layout_constraintEnd_toEndOf="@+id/tabletCountryPopulationTextView" />
+
+            <TextView
+                android:id="@+id/tabletCountryTimezoneTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/tablet_details_text_margin"
+                android:textColor="@color/primary_text_color"
+                android:textSize="@dimen/details_title_text_size"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/tabletCircleImageViewE"
+                app:layout_constraintStart_toEndOf="@+id/tabletCircleImageViewE"
+                app:layout_constraintTop_toTopOf="@+id/tabletCircleImageViewE" />
+
+            <TextView
+                android:id="@+id/tabletLabelCountryTimezoneTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/timezone_label"
+                android:textSize="@dimen/labels_small_text_size"
+                app:layout_constraintBottom_toTopOf="@+id/tabletCountryTimezoneTextView"
+                app:layout_constraintStart_toStartOf="@+id/tabletCountryTimezoneTextView" />
+
+            <TextView
+                android:id="@+id/tabletCountryRegionTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/tablet_details_text_margin"
+                android:textColor="@color/primary_text_color"
+                android:textSize="@dimen/details_title_text_size"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/tabletCircleImageViewNE"
+                app:layout_constraintStart_toEndOf="@+id/tabletCircleImageViewNE"
+                app:layout_constraintTop_toTopOf="@+id/tabletCircleImageViewNE" />
+
+            <TextView
+                android:id="@+id/tabletLabelCountryRegionTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/region_label"
+                android:textSize="@dimen/labels_small_text_size"
+                app:layout_constraintBottom_toTopOf="@+id/tabletCountryRegionTextView"
+                app:layout_constraintStart_toStartOf="@+id/tabletCountryRegionTextView" />
+
+            <TextView
+                android:id="@+id/tabletCountryCallingCodesTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/tablet_details_text_margin"
+                android:textColor="@color/primary_text_color"
+                android:textSize="@dimen/details_title_text_size"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/tabletCircleImageViewSE"
+                app:layout_constraintStart_toEndOf="@+id/tabletCircleImageViewSE"
+                app:layout_constraintTop_toTopOf="@+id/tabletCircleImageViewSE" />
+
+            <TextView
+                android:id="@+id/tabletLabelCountryCallingCodesTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/calling_codes_label"
+                android:textSize="@dimen/labels_small_text_size"
+                app:layout_constraintBottom_toTopOf="@+id/tabletCountryCallingCodesTextView"
+                app:layout_constraintStart_toStartOf="@+id/tabletCountryCallingCodesTextView" />
+
+            <TextView
+                android:id="@+id/tabletCountryCurrenciesTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/tablet_details_text_margin"
+                android:textColor="@color/primary_text_color"
+                android:textSize="@dimen/details_title_text_size"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/tabletCircleImageViewSW"
+                app:layout_constraintEnd_toStartOf="@+id/tabletCircleImageViewSW"
+                app:layout_constraintTop_toTopOf="@+id/tabletCircleImageViewSW" />
+
+            <TextView
+                android:id="@+id/tabletLabelCountryCurrenciesTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/currencies_label"
+                android:textSize="@dimen/labels_small_text_size"
+                app:layout_constraintBottom_toTopOf="@+id/tabletCountryCurrenciesTextView"
+                app:layout_constraintEnd_toEndOf="@+id/tabletCountryCurrenciesTextView" />
+
+            <TextView
+                android:id="@+id/tabletCountryCapitalTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/tablet_details_text_margin"
+                android:textColor="@color/primary_text_color"
+                android:textSize="@dimen/details_title_text_size"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/tabletCircleImageViewNW"
+                app:layout_constraintEnd_toStartOf="@+id/tabletCircleImageViewNW"
+                app:layout_constraintTop_toTopOf="@+id/tabletCircleImageViewNW" />
+
+            <TextView
+                android:id="@+id/tabletLabelCountryCapitalTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/capital_label"
+                android:textSize="@dimen/labels_small_text_size"
+                app:layout_constraintBottom_toTopOf="@+id/tabletCountryCapitalTextView"
+                app:layout_constraintEnd_toEndOf="@+id/tabletCountryCapitalTextView" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</LinearLayout>

@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.country_preview_layout.*
 import kotlinx.android.synthetic.main.country_preview_layout.view.*
 import javax.inject.Inject
 
@@ -45,6 +46,9 @@ class CountryPreviewFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        if (resources.getBoolean(R.bool.is_tablet)) {
+            chooseCardView.visibility = View.GONE
+        }
         viewModel.countriesLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             when (val countriesPreviewViewState = it) {
                 is CountriesPreviewViewState.Default -> {
