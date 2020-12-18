@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
@@ -12,7 +13,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.github.twocoffeesoneteam.glidetovectoryou.GlideApp
 import kotlinx.android.synthetic.main.tablet_country_details_fragment.*
-import kotlinx.android.synthetic.main.tablet_country_details_fragment.view.*
 import javax.inject.Inject
 
 class TabletCountryDetailsFragment : Fragment() {
@@ -41,27 +41,27 @@ class TabletCountryDetailsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val id = arguments?.get(COUNTRY_ID) as? String
+        val id = arguments?.get(COUNTRY_ID) as? String ?: return
         viewModel.countryLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             handleState(it)
         })
-        if (id != null) {
-            viewModel.countryClicked(id)
-        }
+        viewModel.countryClicked(id)
     }
 
     private fun handleState(countryDetailsViewState: CountryDetailsViewState) {
         when (countryDetailsViewState) {
             is CountryDetailsViewState.Default -> {
-                tabletCountryNameTextView.text = countryDetailsViewState.countryDetails.name
-                tabletCountryPopulationTextView.text = countryDetailsViewState.countryDetails.population
-                tabletCountryTimezoneTextView.text = countryDetailsViewState.countryDetails.timezones.getOrNull(0)
-                tabletCountryLanguageTextView.text = countryDetailsViewState.countryDetails.languages.getOrNull(0)
-                tabletCountryCapitalTextView.text = countryDetailsViewState.countryDetails.capital
-                tabletCountryCallingCodesTextView.text = countryDetailsViewState.countryDetails.callingCodes.getOrNull(0)
-                tabletCountryRegionTextView.text = countryDetailsViewState.countryDetails.region
-                tabletCountryCurrenciesTextView.text = countryDetailsViewState.countryDetails.currencyNames.getOrNull(0)
-                loadFlag(countryDetailsViewState.countryDetails)
+                with(countryDetailsViewState.countryDetails) {
+                    tabletCountryNameTextView.text = name
+                    tabletCountryPopulationTextView.text = population
+                    tabletCountryTimezoneTextView.text = timezones.getOrNull(0)
+                    tabletCountryLanguageTextView.text = languages.getOrNull(0)
+                    tabletCountryCapitalTextView.text = capital
+                    tabletCountryCallingCodesTextView.text = callingCodes.getOrNull(0)
+                    tabletCountryRegionTextView.text = region
+                    tabletCountryCurrenciesTextView.text = currencyNames.getOrNull(0)
+                    country_flag.loadSvgImage(this)
+                }
             }
             is CountryDetailsViewState.Error -> {
                 Toast.makeText(
@@ -73,10 +73,10 @@ class TabletCountryDetailsFragment : Fragment() {
         }
     }
 
-    private fun loadFlag(country: CountryDetails) {
+    private fun ImageView.loadSvgImage(country: CountryDetails) {
         val requestBuilder = GlideApp.with(requireContext())
             .`as`(PictureDrawable::class.java)
             .listener(SvgSoftwareLayerSetter())
-        requestBuilder.load(country.flag.toUri()).into(rootView.country_flag)
+        requestBuilder.load(country.flag.toUri()).into(this)
     }
 }

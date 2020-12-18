@@ -147,16 +147,6 @@ class CountryDetailsFragmentTest {
         )
     }
 
-    private fun formatPopulation(value: Double): String {
-        val format = DecimalFormat("0.##")
-        val res = if (value >= 1_000_000) {
-            format.format(value / 1_000_000) + " m"
-        } else {
-            format.format(value)
-        }
-        return res.replace(".", ",")
-    }
-
     private fun formatTime(value: List<String>): List<String> {
         val state: MutableList<String> = mutableListOf(String())
         state.clear()
