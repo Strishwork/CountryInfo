@@ -4,7 +4,7 @@ data class CountryDetails(
     val name: String,
     val capital: String,
     val region: String,
-    val population: Double,
+    val population: String,
     val flag: String,
     val currencyNames: List<String>,
     val languages: List<String>,

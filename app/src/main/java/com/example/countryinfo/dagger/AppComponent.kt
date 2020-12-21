@@ -2,6 +2,7 @@ package com.example.countryinfo.dagger
 
 import com.example.countryinfo.CountryDetailsFragment
 import com.example.countryinfo.CountryPreviewFragment
+import com.example.countryinfo.TabletCountryDetailsFragment
 import dagger.Component
 import javax.inject.Singleton
 
@@ -11,5 +12,6 @@ interface AppComponent {
 
     fun inject(target: CountryPreviewFragment)
     fun inject(target: CountryDetailsFragment)
+    fun inject(target: TabletCountryDetailsFragment)
 
 }

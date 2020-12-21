@@ -2,24 +2,15 @@ package com.example.countryinfo
 
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.lifecycle.MutableLiveData
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.RootMatchers.isDialog
-import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.platform.app.InstrumentationRegistry
 import com.schibsted.spain.barista.assertion.BaristaImageViewAssertions.assertHasDrawable
 import com.schibsted.spain.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition
 import com.schibsted.spain.barista.assertion.BaristaRecyclerViewAssertions.assertRecyclerViewItemCount
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
-import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertNotExist
-import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickBack
 import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn
-import com.schibsted.spain.barista.interaction.BaristaDialogInteractions.clickDialogNegativeButton
-import com.schibsted.spain.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
 import com.schibsted.spain.barista.interaction.BaristaListInteractions.clickListItem
-import com.schibsted.spain.barista.interaction.BaristaListInteractions.clickListItemChild
 import com.schibsted.spain.barista.interaction.BaristaListInteractions.scrollListToPosition
 import org.junit.Before
 import org.junit.Test
@@ -88,7 +79,7 @@ class CountryDetailsFragmentTest {
             "Test name",
             "Test capital",
             "Test region",
-            100.0,
+            "100",
             "https://restcountries.eu/data/afg.svg",
             listOf("Test currency1", "Test currency2"),
             listOf("Test language1", "Test language2"),
@@ -125,7 +116,7 @@ class CountryDetailsFragmentTest {
             ),
             DetailsViewHolderState(
                 DetailsSections.POPULATION.title,
-                listOf(formatPopulation(countryDetails.population)),
+                listOf(countryDetails.population),
                 false,
                 DetailsSections.DEFAULT
             ),
@@ -154,16 +145,6 @@ class CountryDetailsFragmentTest {
                 DetailsSections.CALLING_CODES
             )
         )
-    }
-
-    private fun formatPopulation(value: Double): String {
-        val format = DecimalFormat("0.##")
-        val res = if (value >= 1_000_000) {
-            format.format(value / 1_000_000) + " m"
-        } else {
-            format.format(value)
-        }
-        return res.replace(".", ",")
     }
 
     private fun formatTime(value: List<String>): List<String> {

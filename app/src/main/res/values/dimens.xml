@@ -16,5 +16,14 @@
     <dimen name="choose_card_image_height">100dp</dimen>
     <dimen name="garland_image_height">100dp</dimen>
     <dimen name="titles_margin">8dp</dimen>
+    <dimen name="tablet_details_flag_height">80dp</dimen>
+    <dimen name="tablet_details_flag_width">140dp</dimen>
+    <dimen name="tablet_details_garland_height">180dp</dimen>
+    <dimen name="tablet_details_smile_width">180dp</dimen>
+    <dimen name="tablet_details_smile_height">160dp</dimen>
+    <dimen name="tablet_details_circle_horizontal_margin">30dp</dimen>
+    <dimen name="tablet_details_circle_vertical_margin">10dp</dimen>
+    <dimen name="tablet_details_text_margin">10dp</dimen>
+    <dimen name="tablet_main_layout_margin">60dp</dimen>
 
 </resources>
