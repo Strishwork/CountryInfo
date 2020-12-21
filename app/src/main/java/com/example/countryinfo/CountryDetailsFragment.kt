@@ -1,6 +1,5 @@
 package com.example.countryinfo
 
-import android.graphics.drawable.PictureDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +11,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
-import com.github.twocoffeesoneteam.glidetovectoryou.GlideApp
+import kotlinx.android.synthetic.main.country_details_fragment.*
 import kotlinx.android.synthetic.main.country_details_fragment.view.*
 import javax.inject.Inject
 
@@ -60,7 +59,7 @@ class CountryDetailsFragment : Fragment(), CountryDetailsAdapter.ViewHolder.OnIt
         when (countryDetailsViewState) {
             is CountryDetailsViewState.Default -> {
                 adapter.setCountryStates(countryDetailsViewState.detailsViewHolderStateList)
-                loadFlag(countryDetailsViewState.countryDetails)
+                countryFlagImage.loadSvgImage(countryDetailsViewState.countryDetails.flag.toUri())
             }
             is CountryDetailsViewState.Error -> {
                 Toast.makeText(
@@ -89,12 +88,4 @@ class CountryDetailsFragment : Fragment(), CountryDetailsAdapter.ViewHolder.OnIt
         val alert = dialogBuilder.create()
         alert.show()
     }
-
-    private fun loadFlag(country: CountryDetails) {
-        val requestBuilder = GlideApp.with(requireContext())
-            .`as`(PictureDrawable::class.java)
-            .listener(SvgSoftwareLayerSetter())
-        requestBuilder.load(country.flag.toUri()).into(rootView.countryFlagImage)
-    }
-
 }

@@ -35,11 +35,8 @@ class CountryPreviewAdapter(
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         fun bind(item: CountryPreview) {
-            val requestBuilder = GlideApp.with(itemView.context)
-                .`as`(PictureDrawable::class.java)
-                .listener(SvgSoftwareLayerSetter())
             itemView.country_name.text = item.countryName
-            requestBuilder.load(item.flagUrl.toUri()).into(itemView.country_flag)
+            itemView.country_flag.loadSvgImage(item.flagUrl.toUri())
             itemView.country_capital.text = item.capital
             itemView.country_region.text = item.region
         }

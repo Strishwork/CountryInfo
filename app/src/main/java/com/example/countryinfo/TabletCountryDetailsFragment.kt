@@ -1,17 +1,14 @@
 package com.example.countryinfo
 
-import android.graphics.drawable.PictureDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.github.twocoffeesoneteam.glidetovectoryou.GlideApp
 import kotlinx.android.synthetic.main.tablet_country_details_fragment.*
 import javax.inject.Inject
 
@@ -51,32 +48,33 @@ class TabletCountryDetailsFragment : Fragment() {
     private fun handleState(countryDetailsViewState: CountryDetailsViewState) {
         when (countryDetailsViewState) {
             is CountryDetailsViewState.Default -> {
-                with(countryDetailsViewState.countryDetails) {
-                    tabletCountryNameTextView.text = name
-                    tabletCountryPopulationTextView.text = population
-                    tabletCountryTimezoneTextView.text = timezones.getOrNull(0)
-                    tabletCountryLanguageTextView.text = languages.getOrNull(0)
-                    tabletCountryCapitalTextView.text = capital
-                    tabletCountryCallingCodesTextView.text = callingCodes.getOrNull(0)
-                    tabletCountryRegionTextView.text = region
-                    tabletCountryCurrenciesTextView.text = currencyNames.getOrNull(0)
-                    country_flag.loadSvgImage(this)
-                }
+                setDefaultState(countryDetailsViewState)
             }
             is CountryDetailsViewState.Error -> {
-                Toast.makeText(
-                    context,
-                    countryDetailsViewState.error.message,
-                    Toast.LENGTH_LONG
-                ).show()
+                setErrorState(countryDetailsViewState)
             }
         }
     }
 
-    private fun ImageView.loadSvgImage(country: CountryDetails) {
-        val requestBuilder = GlideApp.with(requireContext())
-            .`as`(PictureDrawable::class.java)
-            .listener(SvgSoftwareLayerSetter())
-        requestBuilder.load(country.flag.toUri()).into(this)
+    private fun setDefaultState(state: CountryDetailsViewState.Default) {
+        with(state.countryDetails) {
+            tabletCountryNameTextView.text = name
+            tabletCountryPopulationTextView.text = population
+            tabletCountryTimezoneTextView.text = timezones.getOrNull(0)
+            tabletCountryLanguageTextView.text = languages.getOrNull(0)
+            tabletCountryCapitalTextView.text = capital
+            tabletCountryCallingCodesTextView.text = callingCodes.getOrNull(0)
+            tabletCountryRegionTextView.text = region
+            tabletCountryCurrenciesTextView.text = currencyNames.getOrNull(0)
+            country_flag.loadSvgImage(flag.toUri())
+        }
+    }
+
+    private fun setErrorState(state: CountryDetailsViewState.Error) {
+        Toast.makeText(
+            context,
+            state.error.message,
+            Toast.LENGTH_LONG
+        ).show()
     }
 }
