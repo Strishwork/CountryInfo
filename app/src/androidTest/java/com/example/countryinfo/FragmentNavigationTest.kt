@@ -3,19 +3,33 @@ package com.example.countryinfo
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ActivityScenario
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import androidx.test.platform.app.InstrumentationRegistry
+import com.example.countryinfo.di.ViewModelFactoriesModule
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickBack
 import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@HiltAndroidTest
+@UninstallModules(ViewModelFactoriesModule::class)
 @RunWith(AndroidJUnit4ClassRunner::class)
 class FragmentNavigationTest {
+
+    @get:Rule
+    var hiltRule = HiltAndroidRule(this)
 
     @Inject
     lateinit var countryPreviewViewModelFactoryMock: CountriesPreviewViewModelFactory
@@ -28,8 +42,7 @@ class FragmentNavigationTest {
 
     @Before
     fun init() {
-        (InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as TestCountriesApplication)
-            .testCountriesComponent.inject(this)
+        hiltRule.inject()
         `when`(countryPreviewViewModelFactoryMock.create(CountriesPreviewViewModel::class.java))
             .thenReturn(previewViewModelMock)
         setCountryDetails()
@@ -39,6 +52,20 @@ class FragmentNavigationTest {
             .thenReturn(detailsViewModelMock)
         `when`(detailsViewModelMock.countryLiveData).thenReturn(MutableLiveData<CountryDetailsViewState>())
         val activityScenario = ActivityScenario.launch(MainActivity::class.java)
+    }
+
+    @InstallIn(ApplicationComponent::class)
+    @Module
+    object MockViewModelsFactoryModule {
+        @Provides
+        @Singleton
+        fun provideCountryDetailsViewModelFactory(): CountryDetailsViewModelFactory =
+            Mockito.mock(CountryDetailsViewModelFactory::class.java)
+
+        @Provides
+        @Singleton
+        fun provideCountryPreviewViewModelFactory(): CountriesPreviewViewModelFactory =
+            Mockito.mock(CountriesPreviewViewModelFactory::class.java)
     }
 
     @Test

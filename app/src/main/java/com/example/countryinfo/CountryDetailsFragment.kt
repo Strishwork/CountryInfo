@@ -11,10 +11,12 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.country_details_fragment.*
 import kotlinx.android.synthetic.main.country_details_fragment.view.*
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class CountryDetailsFragment : Fragment(), CountryDetailsAdapter.ViewHolder.OnItemClickListener {
 
     companion object {
@@ -40,7 +42,6 @@ class CountryDetailsFragment : Fragment(), CountryDetailsAdapter.ViewHolder.OnIt
         recyclerView = rootView.detailsRecyclerView
         adapter = CountryDetailsAdapter(emptyList(), this)
         recyclerView.adapter = adapter
-        (activity?.application as CountriesApplication).countriesComponent.inject(this)
         return rootView
     }
 

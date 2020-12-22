@@ -1,37 +1,60 @@
 package com.example.countryinfo
 
-import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.lifecycle.MutableLiveData
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import androidx.test.platform.app.InstrumentationRegistry
+import com.example.countryinfo.di.ViewModelFactoriesModule
 import com.schibsted.spain.barista.assertion.BaristaImageViewAssertions.assertHasDrawable
 import com.schibsted.spain.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition
 import com.schibsted.spain.barista.assertion.BaristaRecyclerViewAssertions.assertRecyclerViewItemCount
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@HiltAndroidTest
+@UninstallModules(ViewModelFactoriesModule::class)
 @RunWith(AndroidJUnit4ClassRunner::class)
 class CountryPreviewFragmentTest {
+
+    @get:Rule
+    var hiltRule = HiltAndroidRule(this)
 
     @Inject
     lateinit var countryPreviewViewModelFactoryMock: CountriesPreviewViewModelFactory
     private val viewModelMock = Mockito.mock(CountriesPreviewViewModel::class.java)
     private val countriesMutableLiveData = MutableLiveData<CountriesPreviewViewState>()
 
+    @ExperimentalCoroutinesApi
     @Before
     fun init() {
-        (InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as TestCountriesApplication)
-            .testCountriesComponent.inject(this)
+        hiltRule.inject()
         `when`(countryPreviewViewModelFactoryMock.create(CountriesPreviewViewModel::class.java))
             .thenReturn(viewModelMock)
         setCountryDetails()
         `when`(viewModelMock.countriesLiveData).thenReturn(countriesMutableLiveData)
-        val scenario = launchFragmentInContainer<CountryPreviewFragment>()
+        val scenario = launchFragmentInHiltContainer<CountryPreviewFragment>()
+    }
+
+    @InstallIn(ApplicationComponent::class)
+    @Module
+    object MockCountryPreviewViewModelFactoryModule {
+        @Provides
+        @Singleton
+        fun provideCountryPreviewViewModelFactory(): CountriesPreviewViewModelFactory =
+            Mockito.mock(CountriesPreviewViewModelFactory::class.java)
     }
 
     @Test

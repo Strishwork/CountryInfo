@@ -1,9 +1,8 @@
 package com.example.countryinfo
 
-import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.lifecycle.MutableLiveData
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import androidx.test.platform.app.InstrumentationRegistry
+import com.example.countryinfo.di.ViewModelFactoriesModule
 import com.schibsted.spain.barista.assertion.BaristaImageViewAssertions.assertHasDrawable
 import com.schibsted.spain.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition
 import com.schibsted.spain.barista.assertion.BaristaRecyclerViewAssertions.assertRecyclerViewItemCount
@@ -12,33 +11,57 @@ import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertN
 import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn
 import com.schibsted.spain.barista.interaction.BaristaListInteractions.clickListItem
 import com.schibsted.spain.barista.interaction.BaristaListInteractions.scrollListToPosition
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
-import java.text.DecimalFormat
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@HiltAndroidTest
+@UninstallModules(ViewModelFactoriesModule::class)
 @RunWith(AndroidJUnit4ClassRunner::class)
 class CountryDetailsFragmentTest {
+
+    @get:Rule
+    var hiltRule = HiltAndroidRule(this)
 
     @Inject
     lateinit var countryDetailsViewModelFactoryMock: CountryDetailsViewModelFactory
     private val viewModelMock = mock(CountryDetailsViewModel::class.java)
     private val countryMutableLiveData = MutableLiveData<CountryDetailsViewState>()
 
+    @ExperimentalCoroutinesApi
     @Before
     fun init() {
-        (InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as TestCountriesApplication)
-            .testCountriesComponent.inject(this)
+        hiltRule.inject()
         `when`(countryDetailsViewModelFactoryMock.create(CountryDetailsViewModel::class.java))
             .thenReturn(viewModelMock)
         setCountryDetails()
         `when`(viewModelMock.countryLiveData).thenReturn(countryMutableLiveData)
-        val scenario = launchFragmentInContainer<CountryDetailsFragment>(themeResId =
+        val scenario = launchFragmentInHiltContainer<CountryDetailsFragment>(
+            themeResId =
             R.style.Theme_AppCompat_DayNight
         )
+    }
+
+    @InstallIn(ApplicationComponent::class)
+    @Module
+    object MockCountryDetailsViewModelFactoryModule {
+        @Provides
+        @Singleton
+        fun provideCountryDetailsViewModelFactory(): CountryDetailsViewModelFactory =
+            mock(CountryDetailsViewModelFactory::class.java)
     }
 
     @Test

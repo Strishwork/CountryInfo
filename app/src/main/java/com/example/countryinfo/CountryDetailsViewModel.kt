@@ -133,7 +133,9 @@ class CountryDetailsViewModel(private val countryApi: ICountriesApi) : ViewModel
                 flag?.svgFile ?: "",
                 currencies?.mapNotNull { currencyName -> currencyName?.name ?: "" } as List<String>,
                 officialLanguages?.mapNotNull { language -> language?.name ?: "" } as List<String>,
-                formatTime(timezones?.mapNotNull { timezone -> timezone?.name ?: "" } as List<String>),
+                formatTime(timezones?.mapNotNull { timezone ->
+                    timezone?.name ?: ""
+                } as List<String>),
                 callingCodes?.mapNotNull { callingCode ->
                     "+" + callingCode?.name ?: ""
                 } as List<String>

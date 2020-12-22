@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main_tablet.*
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity(R.layout.main_layout),
     CountryPreviewFragment.ItemClickedListener {
 
