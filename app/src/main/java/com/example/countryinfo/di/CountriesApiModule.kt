@@ -1,19 +1,20 @@
-package com.example.countryinfo.dagger
+package com.example.countryinfo.di
 
 import android.os.Looper
 import com.apollographql.apollo.ApolloClient
-import com.example.api.ICountriesApi
 import com.example.api.CountriesApi
+import com.example.api.ICountriesApi
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
 import javax.inject.Singleton
 
+@InstallIn(ApplicationComponent::class)
 @Module
-class CountriesApiModule {
+object CountriesApiModule {
 
-    companion object {
-        private const val API_URL = "https://countries-274616.ew.r.appspot.com/"
-    }
+    private const val API_URL = "https://countries-274616.ew.r.appspot.com/"
 
     @Provides
     @Singleton

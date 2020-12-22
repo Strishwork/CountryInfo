@@ -10,10 +10,12 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.country_preview_layout.*
 import kotlinx.android.synthetic.main.country_preview_layout.view.*
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class CountryPreviewFragment : Fragment() {
 
     companion object {
@@ -41,7 +43,6 @@ class CountryPreviewFragment : Fragment() {
     ): View? {
         rootView = inflater.inflate(R.layout.country_preview_layout, container, false)
         initializeRecyclerView()
-        (activity?.application as CountriesApplication).countriesComponent.inject(this)
         return rootView
     }
 

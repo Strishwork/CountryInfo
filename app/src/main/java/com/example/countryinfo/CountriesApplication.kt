@@ -1,21 +1,11 @@
 package com.example.countryinfo
 
 import android.app.Application
-import com.example.countryinfo.dagger.AppComponent
-import com.example.countryinfo.dagger.AppModule
-import com.example.countryinfo.dagger.DaggerAppComponent
+import dagger.hilt.android.HiltAndroidApp
 
-open class CountriesApplication : Application() {
-
-    lateinit var countriesComponent: AppComponent
-
+@HiltAndroidApp
+class CountriesApplication : Application() {
     override fun onCreate() {
         super.onCreate()
-        countriesComponent = initDagger(this)
     }
-
-    protected open fun initDagger(app: CountriesApplication): AppComponent =
-        DaggerAppComponent.builder()
-            .appModule(AppModule(app))
-            .build()
 }

@@ -9,9 +9,11 @@ import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.tablet_country_details_fragment.*
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class TabletCountryDetailsFragment : Fragment() {
 
     companion object {
@@ -32,7 +34,6 @@ class TabletCountryDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.tablet_country_details_fragment, container, false)
-        (activity?.application as CountriesApplication).countriesComponent.inject(this)
         return rootView
     }
 
